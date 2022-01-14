@@ -1,42 +1,37 @@
 <?php
+header("Content-Type: application/json; charset=UTF-8");
 
-// Path: panel\api\auth.php
+require_once 'app/require.php';
+require_once 'app/controllers/ApiController.php';
 
-include "../includes/db.php";
+$API = new ApiController;
 
+// Check data
+if (empty($_GET['user']) || empty($_GET['pass']) || empty($_GET['hwid']) || empty($_GET['key'])) {
+	
+	$response = array('status' => 'failed', 'error' => 'Missing arguments');
 
-$auser = $_GET['user'];
-$apass = $_GET['pass'];
-$ahwid = $_GET['hwid'];
+} else {
 
-$result = $mysqli->query("SELECT * FROM users WHERE username = '$auser'");
-if ($result->num_rows == 0) {
-	echo "User not found";
-	exit();
-}
-$result = $mysqli->query("SELECT * FROM users WHERE username = '$auser' AND banned = 1");
-if ($result->num_rows == 1) {
-	echo "User banned";
-	exit();
-}
-$result = $mysqli->query("SELECT * FROM users WHERE username = '$auser'");
-$row = $result->fetch_assoc();
-$hash = $row['password'];
-if (!password_verify($apass, $hash)) {
-	echo "Wrong password";
-	exit();
-}
+	$username = $_GET['user'];
+	$passwordHash = $_GET['pass'];
+	$hwidHash = $_GET['hwid'];
+	$key = $_GET['key'];
 
-// if password is correct, check if hwid is correct and if hwid is empty update it
-$result = $mysqli->query("SELECT * FROM users WHERE username = '$auser'");
-$row = $result->fetch_assoc();
-$hwid = $row['hwid'];
-if ($hwid == '') {
-	$mysqli->query("UPDATE users SET hwid = '$ahwid' WHERE username = '$auser'");
-} else if ($hwid != $ahwid) {
-	echo "Wrong hwid";
-	exit();
+	if (API_KEY === $key) {
+
+		// decode
+		$password = base64_decode($passwordHash);
+		$hwid = base64_decode($hwidHash);
+		
+		$response = $API->getUserAPI($username, $password, $hwid);
+
+	} else {
+
+		$response = array('status' => 'failed', 'error' => 'Invalid API key');
+		
+	}
+
 }
 
-echo "success";
-?>
+echo (json_encode($response));
