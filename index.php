@@ -205,7 +205,7 @@ if($hwid != '') { ?>
 </div>
 <div class="col-6 text-right">
 <?php if($dcid == '') { ?>
-<a href="https://discord.com/api/oauth2/authorize?client_id=919537297534365716&redirect_uri=https%3A%2F%2Fvirty.xyz%2Fpanel%2Fapi%2Fdiscord.php&response_type=code&scope=identify%20guilds.join">
+<a href="https://discord.com/api/oauth2/authorize?client_id=931555054392078357&redirect_uri=https%3A%2F%2Fyourdomain.com%2Fpanel%2Fapi%2Fdiscod.php&response_type=code&scope=identify%20guilds.join">
 <button class="button primary outline rounded-circle low-padding low-weight medium-size"><i class="fab fa-discord"></i> Link Discord</button>
 </a>
 
@@ -565,18 +565,6 @@ if ($result->num_rows > 0) {
         }
     }
     </script>
-<script>
-    $('.profile-picture').mouseenter(function() {
-        $(this).addClass('active');
-    });
-    $('.profile-picture').mouseleave(function() {
-        $(this).removeClass('active');
-    });
-
-    $('#profile-picture-input').change(function() {
-        $('#form-picture').submit();
-    })
-</script>
 <script>
     $("#change-pass-form").submit(function(e) {
         e.preventDefault();
