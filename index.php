@@ -30,8 +30,11 @@ $uid = Session::get("uid");
 $admin = Session::get("admin");
 $username = Session::get("username");
 
+$sub = $user->getSubStatus();
+
 Util::banCheck();
 
+// get user hwid
 $hwid = $user->getUserHWID($uid);
 $dcid = $user->getUserDCID($uid);
 
@@ -41,14 +44,34 @@ $row = $result->fetch_assoc();
 $motd = $row["motd"];
 
 
+// if(isset($_POST['reset_discord'])) {
+// 	$sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
+// 	$result = mysqli_query($mysqli, $sql);
+// 	Util::redirect('/');
+// 	mysqli_query($mysqli, $sql);
+// }
+
+
 if(isset($_POST['reset_discord'])) {
-	$sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
-	$sql2 = "UPDATE users SET verifycode = '' WHERE uid = '$uid'";
-	$result = mysqli_query($mysqli, $sql);
-	$result = mysqli_query($mysqli, $sql2);
-	Util::redirect('/');
-	mysqli_query($mysqli, $sql);
-}
+
+    
+    $url = "https://discordapp.com/api/guilds/919531932054872065/members/".$dcid;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Authorization: Bot '.$discord_token,
+        'Content-Type: application/json'
+    ));
+    $result = curl_exec($ch);
+    curl_close($ch);
+
+    $sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
+    $result = mysqli_query($mysqli, $sql);
+    Util::redirect('/');
+    mysqli_query($mysqli, $sql);
+} 
+
 
 if(isset($_POST['reset_hwid'])) {
 	$time = time();
@@ -85,7 +108,7 @@ if(isset($_POST['reset_hwid'])) {
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel - Dashboard</title>
+<title>Virty - Dashboard</title>
 
 <link href="dashboard/css/dashboard/dashboard.css" rel="stylesheet">
 
@@ -153,7 +176,7 @@ if(isset($_POST['reset_hwid'])) {
 </div>
 <div class="row my-2 content">
 <div class="col-md-4">
-<span>Status</span>
+<span>STATUS</span>
 </div>
 <div class="col-md-8 text-right">
 <span><?php Util::display($cheat->getCheatData()->status); ?></span>
@@ -205,7 +228,9 @@ if($hwid != '') { ?>
 </div>
 <div class="col-6 text-right">
 <?php if($dcid == '') { ?>
-<a href="https://discord.com/api/oauth2/authorize?client_id=931555054392078357&redirect_uri=https%3A%2F%2Fyourdomain.com%2Fpanel%2Fapi%2Fdiscod.php&response_type=code&scope=identify%20guilds.join">
+<a 
+href="https://virty.xyz/panel/" 
+target="popup" onclick="window.open('https://discord.com/api/oauth2/authorize?client_id=919537297534365716&redirect_uri=https%3A%2F%2Fvirty.xyz%2Fpanel%2Fapi%2Fdiscord.php&response_type=code&scope=identify%20guilds.join','popup','width=600,height=600'); return false;">
 <button class="button primary outline rounded-circle low-padding low-weight medium-size"><i class="fab fa-discord"></i> Link Discord</button>
 </a>
 
@@ -256,7 +281,9 @@ if($hwid != '') { ?>
 </div>
 </div>
 </div>
-<div class="messages box mb-3">
+
+
+<!-- <div class="messages box mb-3">
 <div class="row">
 <div class="col-6">
 <h2 class="mb-0">Subscription</h2>
@@ -265,7 +292,10 @@ if($hwid != '') { ?>
 <a onclick="switchCarousel(4)" href="#0" class="button primary outline rounded-circle low-padding low-weight medium-size">View</a>
 </div>
 </div>
-</div>
+</div> -->
+
+
+
 <div class="row mb-2">
 <?php if (Session::isAdmin() == true) : ?>
 <div class="col-lg-6">
@@ -415,7 +445,7 @@ if ($result->num_rows > 0) {
 
 <div class="carousel-item">
 <div class="title d-flex align-items-center">
-<i onclick="switchCarousel(4)" class="fas fa-chevron-left"></i>
+<i onclick="switchCarousel(0)" class="fas fa-chevron-left"></i>
  <h2>Changelogs</h2>
 </div>
 <div class="changelogs box mb-3">
@@ -475,10 +505,7 @@ if ($result->num_rows > 0) {
 </div>
 </div>
 <div class="box">
-<ul style="padding-left: 0; margin-bottom: 0;">
-<li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
-<span class=added>added</span> Initial release</li>
-</ul>
+<ul style="padding-left: 0; margin-bottom: 0;"><li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><span class=added>added</span> Initial release</li></ul>
 </div>
 </div> </div>
 
@@ -489,7 +516,7 @@ if ($result->num_rows > 0) {
 <h2>Change Password</h2>
 </div>
 <div class="box mb-3">
-<form method="POST" action="<?php Util::display($_SERVER['PHP_SELF']); ?>">
+<form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
 <div class="form-input-icon mb-3">
 <i class="fas fa-lock"></i>
 <input class="auth-input" type="password" placeholder="Current password" name="currentPassword" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="current-password">
@@ -502,7 +529,7 @@ if ($result->num_rows > 0) {
 <i class="fas fa-lock"></i>
 <input class="auth-input" type="password" placeholder="Confirm password" name="confirmPassword" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="new-password">
 </div>
-<button class="button primary d-block mt-3 w-100" name="updatePassword" type="submit" value="submit">Change</button>
+<button class="button primary d-block mt-3 w-100" name="activateSub" type="submit" value="submit">Change</button>
 </div>
 </form>
 </div>
@@ -537,7 +564,7 @@ if ($sub > 0) {
 <i class="fas fa-key"></i>
 <input class="auth-input" type="password" placeholder="Subscription Code" name="subCode" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="new-password">
 </div>
-<button class="button primary d-block mt-3 w-100" name="updatePassword" type="submit" value="submit">Submit</button>
+<button class="button primary d-block mt-3 w-100" name="activateSub" type="submit" value="submit">Submit</button>
 </div>
 </form>
 </div>
@@ -614,51 +641,4 @@ if ($sub > 0) {
         }
     }
     </script>
-<script>
-    $("#change-pass-form").submit(function(e) {
-        e.preventDefault();
-
-        if ($('#change-pass-button').hasClass('disabled'))
-            return;
-
-        $('#change-pass-button').addClass('disabled');
-        var data = new FormData($('#change-pass-form')[0]);
-        $.ajax({
-            url: 'php/change_pass.php',
-            contentType: "text/html; charset=UTF-8",
-            type: 'POST',
-            data: data,
-            cache: false,
-            async: true,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                switch (response) {
-                    case 'new_same_as_current':
-                        notify("The new password is the same as the current one.", 0);
-                        break;
-                    case 'wrong_current_password':
-                        notify("This is not your current password.", 0);
-                        break;
-                    case 'long_password':
-                        notify("Your password is too long.", 0);
-                        break;
-                    case 'changed':
-                        notify("Your password has been changed", 1);
-                        break;
-                }
-                // reset inputs
-                $('#current-password').val("");
-                $('#new-password').val("");
-            },
-            error: function() {
-                notify("Some unknown error has occurred, please try again later.", 0);
-            }
-        });
-        setTimeout(
-            function() {
-                $('#change-pass-button').removeClass('disabled').delay(800);
-            }, 700);
-    });
-</script>
 </html>
