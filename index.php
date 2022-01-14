@@ -153,7 +153,7 @@ if(isset($_POST['reset_hwid'])) {
 </div>
 <div class="row my-2 content">
 <div class="col-md-4">
-<span>STATUS</span>
+<span>Status</span>
 </div>
 <div class="col-md-8 text-right">
 <span><?php Util::display($cheat->getCheatData()->status); ?></span>
@@ -246,6 +246,7 @@ if($hwid != '') { ?>
 </div>
 </div>
 </div>
+
 <div class="changelogs box mb-2">
 <div class="row">
 <div class="col-6">
@@ -256,6 +257,18 @@ if($hwid != '') { ?>
 </div>
 </div>
 </div>
+
+<!-- <div class="messages box mb-3">
+<div class="row">
+<div class="col-6">
+<h2 class="mb-0">Subscription</h2>
+</div>
+<div class="col-6 text-right">
+<a onclick="switchCarousel(4)" href="#0" class="button primary outline rounded-circle low-padding low-weight medium-size">View</a>
+</div>
+</div>
+</div> -->
+
 <div class="row mb-2">
 <?php if (Session::isAdmin() == true) : ?>
 <div class="col-lg-6">
@@ -405,7 +418,7 @@ if ($result->num_rows > 0) {
 
 <div class="carousel-item">
 <div class="title d-flex align-items-center">
-<i onclick="switchCarousel(0)" class="fas fa-chevron-left"></i>
+<i onclick="switchCarousel(4)" class="fas fa-chevron-left"></i>
  <h2>Changelogs</h2>
 </div>
 <div class="changelogs box mb-3">
@@ -465,7 +478,10 @@ if ($result->num_rows > 0) {
 </div>
 </div>
 <div class="box">
-<ul style="padding-left: 0; margin-bottom: 0;"><li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><span class=added>added</span> Initial release</li></ul>
+<ul style="padding-left: 0; margin-bottom: 0;">
+<li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
+<span class=added>added</span> Initial release</li>
+</ul>
 </div>
 </div> </div>
 
@@ -493,6 +509,42 @@ if ($result->num_rows > 0) {
 </div>
 </form>
 </div>
+
+<div class="carousel-item">
+<div class="title d-flex align-items-center">
+<i onclick="switchCarousel(0)" class="fas fa-chevron-left"></i>
+<h2>Subscription</h2>
+</div>
+<div class="changelogs box mb-3">
+<div class="title">
+<div class="row">
+<div class="col-md-7">
+<div class="d-flex align-items-center">
+<div class="user">
+<h3 class="mb-0">Subscription</h3>
+<span>
+<?php
+if ($sub > 0) {
+    Util::display($sub . ' days');
+} else {
+    Util::display('0 days');
+} ?>    
+<span>
+</div>
+</div>
+</div>
+<div class="box mb-3">
+<?php if ($sub <= 0) : ?>
+<form method="POST" action="<?php Util::display($_SERVER['PHP_SELF']); ?>">
+<div class="form-input-icon mb-3">
+<i class="fas fa-key"></i>
+<input class="auth-input" type="password" placeholder="Subscription Code" name="subCode" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="new-password">
+</div>
+<button class="button primary d-block mt-3 w-100" name="updatePassword" type="submit" value="submit">Submit</button>
+</div>
+</form>
+</div>
+<?php endif; ?>
 
 </div>
 </div>
