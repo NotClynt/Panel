@@ -23,7 +23,7 @@ Original Panel [GitHub - znixbtw/panel-v2: Yet another panel for your CS:GO chea
 Examples for the API you find on [GitHub - clynt707/panel-v2-resources](https://github.com/clynt707/panel-v2-resources)
 
 
-```Oh, if someone has a bit of order and cleancode to bring in may like to make push```
+```Oh, if someone has a bit time can make it clean and can push yeah? thx :)```
 
 ---
 
