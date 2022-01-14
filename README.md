@@ -16,7 +16,7 @@
 
 #### Informations
 
-This is a Edit from [znixbtw panel]((https://github.com/znixbtw)
+This is a Edit from [znixbtw panel](https://github.com/znixbtw)
 
 Original Panel [GitHub - znixbtw/panel-v2: Yet another panel for your CS:GO cheat. W.I.P](https://github.com/znixbtw/panel-v2)
 
