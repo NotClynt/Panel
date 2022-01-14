@@ -1,0 +1,41 @@
+@import url("var.css");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+
+
+html, body { height: 100%; }
+hr {border-color: var(--accent);}
+.modal-header, .modal-footer {border: none;}
+.help-block { font-size: 11px; }
+.btn-custom { border-color: var(--accent); color: #fff; width: 90px;}
+.btn { border-color: var(--accent); color: #fff;}
+.btn-custom:hover { background-color: var(--accent); color: #fff;}
+.btn:hover { background-color: var(--accent); color: #fff;}
+.close:focus, .close:hover { color: #fff; text-shadow: none !important; }
+.close { text-shadow: none !important; }
+.white {color: white;}
+.red {color:red;}
+.green {color:green;}
+.chatbox{height:250px;}
+.contrast {background-color:  var(--contrast);}
+.contrast:focus {background-color:  var(--contrast);}
+.btn-primary {background-color: var(--accent) !important;}
+.sm { font-size: 9px; vertical-align: middle;}
+
+body {
+    font-family: 'Noto Sans',sans-serif;
+    background-color: var(--background) !important;
+    transition: all .5s cubic-bezier(.685,.0473,.346,1);
+    overflow-x: hidden;
+}
+.box {
+    background-color: var(--secondary) !important;
+    color: #ffffff;
+    padding: 10px;
+    box-shadow: 0 0 12px 0 rgba(0,0,0,0.6);
+}
+.accent {
+    border-top: 2px solid var(--accent);
+}
+
+
+
