@@ -4,8 +4,8 @@
 
 
 
-![GitHub language](https://img.shields.io/github/languages/count/clynt707/panel-v2-resources?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/clynt707/panel-v2-resources?style=for-the-badge)
+![GitHub language](https://img.shields.io/github/languages/count/clynt707/Panel?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/clynt707/Panel?style=for-the-badge)
 
 <img alt="Version" src="https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/kefranabg/readme-md-generator/graphs/commit-activity" target="_blank">
