@@ -187,6 +187,13 @@ class UserController extends Users {
 
 	}
 
+	// resetUserHWID
+	public function resetuHWID($username) {
+		
+		return $this->resetUserHWID($username);
+
+	}
+
 	public function activateSub($data) {
 
 		// Bind data
