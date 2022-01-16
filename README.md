@@ -67,7 +67,7 @@ Download databse base [HERE](https://anonfiles.com/L7RfpbBax3/db_sql)
 
 * Website : https://clynt.me/
 
-* Discord : https://discord.gg/2KkqW3YFxV (Well, its customer only.)
+* Discord : https://discord.gg/VaUzwfhkc3
 
 
 
