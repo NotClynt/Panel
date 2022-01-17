@@ -47,7 +47,7 @@ Video for Discord OAuth2 setup [Click here](https://youtu.be/zHnGx7bJ0oE)
 
 
 
-Download databse base [HERE](https://anonfiles.com/L7RfpbBax3/db_sql)
+Download databse base [HERE](https://anonfiles.com/L9b7R5B8x2/db_1_sql)
 
 ---
 
