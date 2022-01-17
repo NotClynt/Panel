@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		<div class="col-12 mt-3">
 			<div class="rounded p-3 mb-3">
 
-				<form method="POST" action="<?php Util::display($_SERVER['PHP_SELF']); ?>"
+				<form method="POST" action="<?php Util::display($_SERVER['PHP_SELF']); ?>">
 								
 					<button name="genInv" type="submit" class="btn btn-outline-primary btn-sm">
 						Gen Code
