@@ -25,12 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Virty - Login</title>
 
-<link href="auth/css/bootstrap.min.css" rel="stylesheet">
-<link href="auth/css/config.css" rel="stylesheet">
-<link href="auth/css/global.css" rel="stylesheet">
-<link href="auth/css/responsive.css" rel="stylesheet">
-<link href="auth/css/snackbar.css" rel="stylesheet">
-<link href="auth/css/auth/custom.css" rel="stylesheet">
+<link href="dashboard/css/bootstrap.min.css" rel="stylesheet">
+<link href="dashboard/css/config.css" rel="stylesheet">
+<link href="dashboard/css/global.css" rel="stylesheet">
+<link href="dashboard/css/responsive.css" rel="stylesheet">
+<link href="dashboard/css/snackbar.css" rel="stylesheet">
+<link href="dashboard/css/auth/custom.css" rel="stylesheet">
 
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<link rel="stylesheet" href="auth/js/snackbar.css" />
-<script src="auth/js/snackbar.js"></script>
+<link rel="stylesheet" href="dashboard/js/snackbar.css" />
+<script src="dashboard/js/snackbar.js"></script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <link rel="shortcut icon" type="image/x-icon" href="https://cdn.discordapp.com/attachments/919533264119677018/927264353504362496/PicsArt_01-02-07.16.51.png">
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
 <script src="auth/js/bootstrap.js"></script>
 
-<script src="auth/js/core.js"></script>
+<script src="dashboard/js/core.js"></script>
 
 <script>
     AOS.init({
