@@ -51,6 +51,16 @@ Download databse base [HERE](https://anonfiles.com/L9b7R5B8x2/db_1_sql)
 
 ---
 
+### Contributing
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
 ### Authors
 
 👤 [znixbtw](https://github.com/znixbtw)
