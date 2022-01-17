@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-<link rel="stylesheet" href="dashboard/js/snackbar.css" />
+<link rel="stylesheet" href="dashboard/css/snackbar.css" />
 <script src="dashboard/js/snackbar.js"></script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); 
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-<script src="auth/js/bootstrap.js"></script>
+<script src="dashboard/js/bootstrap.js"></script>
 
 <script src="dashboard/js/core.js"></script>
 
