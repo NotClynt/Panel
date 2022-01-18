@@ -87,7 +87,7 @@ Then it's time to switch to [PuhHosting](https;//www.puh.hosting). Get a low-cos
 
 * Website : https://clynt.me/
 
-* Discord : https://discord.gg/VaUzwfhkc3
+* Discord : https://discord.gg/
 
 
 
