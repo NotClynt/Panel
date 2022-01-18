@@ -57,7 +57,7 @@ Download databse base [HERE](https://anonfiles.com/L9b7R5B8x2/db_1_sql)
 
 You need a free Webspace?
 
-Then it's time to switch to PuhHosting. Get a low-cost but high-quality product today.
+Then it's time to switch to [PuhHosting](https;//www.puh.hosting). Get a low-cost but high-quality product today.
 
 ---
 
