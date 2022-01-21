@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); 
 </div>
 <div class="form-input-icon mb-3">
 <i class="fas fa-lock"></i>
-<input class="auth-input" type="password" placeholder="Password" name="password" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="password">
+<input class="auth-input" type="password" placeholder="Password" name="password" autocomplete="off" id="password">
 </div>
 <input type="hidden" id="g-captcha-response" name="g-captcha-response" />
 <button class="button primary d-block mt-3 w-100" id="submit" type="submit">Login</button>
