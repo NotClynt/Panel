@@ -3,12 +3,16 @@ include 'app/require.php';
 
 include 'includes/db.php';
 
-$user = new UserController;
+$user = new UserController();
 
 Session::init();
 
-if (Session::isLogged()) { Util::redirect('/'); }
-if ($_SERVER['REQUEST_METHOD'] === 'POST') { $error = $user->loginUser($_POST); }
+if (Session::isLogged()) {
+    Util::redirect('/');
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $error = $user->loginUser($_POST);
+}
 
 
 ?>

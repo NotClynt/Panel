@@ -4,7 +4,7 @@ require_once '../app/require.php';
 
 include '../includes/db.php';
 
-$user = new UserController;
+$user = new UserController();
 
 Session::init();
 
@@ -59,7 +59,7 @@ Util::head('Reseller Panel');
                     $result = $mysqli->query($sql);
                     // if user is reseller then show reseller navbar else redirect to home
                     if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
+                        while ($row = $result->fetch_assoc()) {
                             if ($row["reseller"] == 1) {
                                 echo '<li class="nav-item">
                             <a class="nav-link" href="'.SUB_DIR.'/reseller/index">Home</a>

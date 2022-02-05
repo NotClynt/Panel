@@ -12,7 +12,7 @@ define('SITE_DESC', 'Virty ');
 
 /**
  * Folder name should be defined starting with the "/" (slash)
- * 
+ *
  * If you do not plan on having it in a subdomain,
  * keep '' empty without a "/" (slash)
  * example: define('SUB_DIR', '');

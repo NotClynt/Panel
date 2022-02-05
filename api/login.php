@@ -17,39 +17,28 @@ $hwid = base64_decode($_GET['hwid']);
 $key = base64_decode($_GET['key']);
 
 if (empty($username) || empty($password) || empty($hwid) || empty($key)) {
-    
     $response = array('status' => 'failed', 'error' => 'Missing arguments');
-    
 } else {
-
     if ($apikey === $key) {
-
         $sql = "SELECT * FROM users WHERE username = '$username'";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
 
         if (!$row) {
             $response = array('status' => 'failed', 'error' => 'Invalid username');
-            
         } else {
-
             $hashedPassword = $row["password"];
 
             if (password_verify($password, $hashedPassword)) {
-
                 $result = $mysqli->query("SELECT * FROM users WHERE username = '$auser'");
                 $row = $result->fetch_assoc();
                 $sub = $row["sub"];
                 if ($sub < date("Y-m-d")) {
                     $response = array('status' => 'failed', 'error' => 'Your subscription has expired');
-
                 } else {
-
-                    if ($row["hwid"] === NULL) {
-
+                    if ($row["hwid"] === null) {
                         $sql = "UPDATE users SET hwid = '$hwid' WHERE username = '$username'";
                         $result = $conn->query($sql);
-
                     }
 
                     $response = array(
@@ -63,15 +52,9 @@ if (empty($username) || empty($password) || empty($hwid) || empty($key)) {
                         'createdAt' => $row["createdAt"]
                     );
                 }
-
             } else {
-
                 $response = array('status' => 'failed', 'error' => 'Invalid password');
-
             }
-
         }
-
     }
-
 }

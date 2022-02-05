@@ -6,58 +6,49 @@
 
 require_once SITE_ROOT . '/app/core/Database.php';
 
-class API extends Database {
+class API extends Database
+{
+    protected function userAPI($username, $password, $hwid)
+    {
 
-	protected function userAPI($username, $password, $hwid) {
+        // fetch username
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $row = $this->statement->fetch();
 
-		// fetch username
-		$this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$username]);
-		$row = $this->statement->fetch();
-		
-		// If username is correct
-		if ($row) {
+        // If username is correct
+        if ($row) {
+            $hashedPassword = $row->password;
 
-			$hashedPassword = $row->password;
+            // If password is correct
+            if (password_verify($password, $hashedPassword)) {
+                if ($row->hwid === null) {
+                    $this->prepare('UPDATE `users` SET `hwid` = ? WHERE `username` = ?');
+                    $this->statement->execute([$hwid, $username]);
+                }
 
-			// If password is correct
-			if (password_verify($password, $hashedPassword)) {
+                $response = array(
+                    'status' => 'success',
+                    'uid' => $row->uid,
+                    'username' => $row->username,
+                    'hwid' => $row->hwid,
+                    'admin' => $row->admin,
+                    'sub' => $row->sub,
+                    'banned' => $row->banned,
+                    'invitedBy' => $row->invitedBy,
+                    'createdAt' => $row->createdAt
+                );
+            } else {
 
-				if ($row->hwid === NULL) {
+                // Wrong pass, user exists
+                $response = array('status' => 'failed', 'error' => 'Invalid password');
+            }
+        } else {
 
-					$this->prepare('UPDATE `users` SET `hwid` = ? WHERE `username` = ?');
-					$this->statement->execute([$hwid, $username]);
+            // Wrong username, user doesnt exists
+            $response = array('status' => 'failed', 'error' => 'Invalid username');
+        }
 
-				}
-				
-				$response = array(
-					'status' => 'success', 
-					'uid' => $row->uid,
-					'username' => $row->username,
-					'hwid' => $row->hwid,
-					'admin' => $row->admin,
-					'sub' => $row->sub,
-					'banned' => $row->banned,
-					'invitedBy' => $row->invitedBy,
-					'createdAt' => $row->createdAt
-				);
-
-			} else {
-
-				// Wrong pass, user exists
-				$response = array('status' => 'failed', 'error' => 'Invalid password');
-
-			}
-
-		} else {
-
-			// Wrong username, user doesnt exists
-			$response = array('status' => 'failed', 'error' => 'Invalid username');
-
-		}
-
-		return $response;
-
-	}
-
+        return $response;
+    }
 }
