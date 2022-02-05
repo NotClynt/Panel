@@ -5,119 +5,103 @@
 
 require_once SITE_ROOT . '/app/models/AdminModel.php';
 
-class AdminController extends Admin {
-
-	
-	//
-	public function getUserArray() {
-		
-		return $this->UserArray();
-
-	}
-
-
-	//
-	public function getInvCodeArray() {
-
-		return $this->invCodeArray();
-
-	}
-
-	// 
-	public function getLogsArray() {
-
-		return $this->logsArray();
-
-	}
-
-	// 
-	public function purgeAllLogs() {
-
-		return $this->logsPurge();
-	}
-
-	//
-	public function getSubCodeArray() {
-
-		return $this->subCodeArray();
-
-	}
-
-
-	//
-	public function getInvCodeGen($username) {
-
-		$code = Util::randomCode(20);
-		return $this->invCodeGen($code, $username);
-
-	}
-
+class AdminController extends Admin
+{
     //
-    public function getInvWave($username) {
-
-        return $this->invWave($username);
-
+    public function getUserArray()
+    {
+        return $this->UserArray();
     }
 
-	//
-	public function getSubCodeGen($username) {
 
-		$code = Util::randomCode(20);
-		return $this->subCodeGen($code, $username);
+    //
+    public function getInvCodeArray()
+    {
+        return $this->invCodeArray();
+    }
 
-	}
+    //
+    public function getLogsArray()
+    {
+        return $this->logsArray();
+    }
 
+    //
+    public function purgeAllLogs()
+    {
+        return $this->logsPurge();
+    }
 
-	// 
-	public function resetHWID($uid) {
-		
-		return $this->HWID($uid);
-
-	}
-
-	// 
-	public function setBanned($uid) {
-		
-		return $this->banned($uid);
-
-	}
-
-
-	// 
-	public function setAdmin($uid) {
-		
-		return $this->administrator($uid);
-
-	}
+    //
+    public function getSubCodeArray()
+    {
+        return $this->subCodeArray();
+    }
 
 
-	//
-	public function setCheatStatus() {
+    //
+    public function getInvCodeGen($username)
+    {
+        $code = Util::randomCode(20);
+        return $this->invCodeGen($code, $username);
+    }
 
-		return $this->cheatStatus();
-		
-	}
+    //
+    public function getInvWave($username)
+    {
+        return $this->invWave($username);
+    }
 
-	// 
-	public function setMotd($motd) {
-		
-		return $this->motd($motd);
-
-	}
-
-	//
-	public function setCheatMaint() {
-
-		return $this->cheatMaint();
-
-	}
+    //
+    public function getSubCodeGen($username)
+    {
+        $code = Util::randomCode(20);
+        return $this->subCodeGen($code, $username);
+    }
 
 
-	//
-	public function setCheatVersion($data) {
+    //
+    public function resetHWID($uid)
+    {
+        return $this->HWID($uid);
+    }
 
-		return $this->cheatVersion($data);
+    //
+    public function setBanned($uid)
+    {
+        return $this->banned($uid);
+    }
 
-	}
 
+    //
+    public function setAdmin($uid)
+    {
+        return $this->administrator($uid);
+    }
+
+
+    //
+    public function setCheatStatus()
+    {
+        return $this->cheatStatus();
+    }
+
+    //
+    public function setMotd($motd)
+    {
+        return $this->motd($motd);
+    }
+
+    //
+    public function setCheatMaint()
+    {
+        return $this->cheatMaint();
+    }
+
+
+    //
+    public function setCheatVersion($data)
+    {
+        return $this->cheatVersion($data);
+    }
 }

@@ -5,8 +5,8 @@ require_once '../app/controllers/AdminController.php';
 
 include '../includes/db.php';
 
-$user = new UserController;
-$admin = new AdminController;
+$user = new UserController();
+$admin = new AdminController();
 
 Session::init();
 

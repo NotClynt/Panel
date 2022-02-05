@@ -5,12 +5,16 @@ require_once 'app/require.php';
 
 include 'includes/db.php';
 
-$user = new UserController;
+$user = new UserController();
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/login'); }
-if (!Session::isBanned()) { Util::redirect('/index'); }
+if (!Session::isLogged()) {
+    Util::redirect('/login');
+}
+if (!Session::isBanned()) {
+    Util::redirect('/index');
+}
 
 $username = Session::get("username");
 

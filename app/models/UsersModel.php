@@ -6,290 +6,243 @@
 
 require_once SITE_ROOT . '/app/core/Database.php';
 
-class Users extends Database {
+class Users extends Database
+{
+    // Check if username exists
+    protected function usernameCheck($username)
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
 
-	// Check if username exists
-	protected function usernameCheck($username) {
-		
-		$this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$username]);
-
-		if ($this->statement->rowCount() > 0) {
-
-			return true;
-
-		} else {
-
-			return false; 
-
-		}
-
-	}
+        if ($this->statement->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
-	// Check if invite code is valid
-	protected function invCodeCheck($invCode) {
+    // Check if invite code is valid
+    protected function invCodeCheck($invCode)
+    {
+        $this->prepare('SELECT * FROM `license` WHERE `code` = ?');
+        $this->statement->execute([$invCode]);
 
-		$this->prepare('SELECT * FROM `license` WHERE `code` = ?');
-		$this->statement->execute([$invCode]);
-
-		if ($this->statement->rowCount() > 0) {
-
-			return true;
-
-		} else {
-
-			return false; 
-
-		}
-
-	}
+        if ($this->statement->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
-	// Check if sub code is valid
-	protected function subCodeCheck($subCode) {
+    // Check if sub code is valid
+    protected function subCodeCheck($subCode)
+    {
+        $this->prepare('SELECT * FROM `subscription` WHERE `code` = ?');
+        $this->statement->execute([$subCode]);
 
-		$this->prepare('SELECT * FROM `subscription` WHERE `code` = ?');
-		$this->statement->execute([$subCode]);
-	
-		if ($this->statement->rowCount() > 0) {
-	
-			return true;
-	
-		} else {
-	
-			return false; 
-	
-		}
-	
-	}
+        if ($this->statement->rowCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	// Check if sub is active
-	protected function subActiveCheck($username) {
+    // Check if sub is active
+    protected function subActiveCheck($username)
+    {
+        $date = new DateTime(); // Get current date
+        $currentDate = $date->format('Y-m-d'); // Format Year-Month-Day
 
-		$date = new DateTime(); // Get current date
-		$currentDate = $date->format('Y-m-d'); // Format Year-Month-Day
+        $this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $subTime = $this->statement->fetch();
 
-		$this->prepare('SELECT `sub` FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$username]);
-		$subTime = $this->statement->fetch();
-
-		// Pasted from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
-		$date1 = date_create($currentDate); // Convert String to date format
-		$date2 = date_create($subTime->sub); // Convert String to date format
-		$diff = date_diff($date1, $date2);
-		return intval($diff->format("%R%a"));
-
-	}
+        // Pasted from https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_date_diff
+        $date1 = date_create($currentDate); // Convert String to date format
+        $date2 = date_create($subTime->sub); // Convert String to date format
+        $diff = date_diff($date1, $date2);
+        return intval($diff->format("%R%a"));
+    }
 
 
-	// Login - Sends data to DB
-	protected function login($username, $password) {
-		
-		// fetch username
-		$this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$username]);
-		$row = $this->statement->fetch();
-		
-		// If username is correct
-		if ($row) {
+    // Login - Sends data to DB
+    protected function login($username, $password)
+    {
 
-			$hashedPassword = $row->password;
+        // fetch username
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $row = $this->statement->fetch();
 
-			// If password is correct
-			if (password_verify($password, $hashedPassword)) {
+        // If username is correct
+        if ($row) {
+            $hashedPassword = $row->password;
 
-				return $row;
-
-			} else {
-
-				return false;
-
-			}
-
-		}
-
-	}
+            // If password is correct
+            if (password_verify($password, $hashedPassword)) {
+                return $row;
+            } else {
+                return false;
+            }
+        }
+    }
 
 
-	// Register - Sends data to DB
-	protected function register($username, $hashedPassword, $invCode) {
+    // Register - Sends data to DB
+    protected function register($username, $hashedPassword, $invCode)
+    {
 
-		// Get inviter's username
-		$this->prepare('SELECT `createdBy` FROM `license` WHERE `code` = ?');
-		$this->statement->execute([$invCode]);
-		$row = $this->statement->fetch();
-		$inviter = $row->createdBy;
+        // Get inviter's username
+        $this->prepare('SELECT `createdBy` FROM `license` WHERE `code` = ?');
+        $this->statement->execute([$invCode]);
+        $row = $this->statement->fetch();
+        $inviter = $row->createdBy;
 
-		// Sending the query - Register user
-		$this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
+        // Sending the query - Register user
+        $this->prepare('INSERT INTO `users` (`username`, `password`, `invitedBy`) VALUES (?, ?, ?)');
 
-		// If user registered
-		if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
+        // If user registered
+        if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
 
-			// Delete invite code // used
-			$this->prepare('DELETE FROM `license` WHERE `code` = ?');
-			$this->statement->execute([$invCode]);
-			return true;
+            // Delete invite code // used
+            $this->prepare('DELETE FROM `license` WHERE `code` = ?');
+            $this->statement->execute([$invCode]);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		} else {
+    // Upddate user password
+    protected function updatePass($currentPassword, $hashedPassword, $username)
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $row = $this->statement->fetch();
 
-			return false;
+        // Fetch current password from database
+        $currentHashedPassword = $row->password;
 
-		}
+        if (password_verify($currentPassword, $currentHashedPassword)) {
+            $this->prepare('UPDATE `users` SET `password` = ? WHERE `username` = ?');
+            $this->statement->execute([$hashedPassword, $username]);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	}
-
-	// Upddate user password
-	protected function updatePass($currentPassword, $hashedPassword, $username) {
-
-		
-
-		$this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$username]);
-		$row = $this->statement->fetch();
-
-		// Fetch current password from database
-		$currentHashedPassword = $row->password;
-
-		if (password_verify($currentPassword, $currentHashedPassword)) {
-
-			$this->prepare('UPDATE `users` SET `password` = ? WHERE `username` = ?');
-			$this->statement->execute([$hashedPassword, $username]);
-			return true;
-
-		} else {
-
-			return false;
-
-		}
-
-	}
-
-	// Reset HWID
-	protected function resetUserHWID($username) {
-
-		$time = time();
-		$this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$username]);
-		$row = $this->statement->fetch();
-		$last_reset = $row->last_reset;
-		if($time - $last_reset < 172800) {
-			echo '<div class="alert alert-danger" role="alert">
+    // Reset HWID
+    protected function resetUserHWID($username)
+    {
+        $time = time();
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$username]);
+        $row = $this->statement->fetch();
+        $last_reset = $row->last_reset;
+        if ($time - $last_reset < 172800) {
+            echo '<div class="alert alert-danger" role="alert">
 			<strong>Error!</strong>';
-			$time = 172800 - ($time - $last_reset);
-			$days = floor($time / 86400);
-			$hours = floor(($time % 86400) / 3600);
-			$minutes = floor(($time % 3600) / 60);
-			$seconds = floor($time % 60);
-			echo 'You can only reset your hwid once every 48 hours.
+            $time = 172800 - ($time - $last_reset);
+            $days = floor($time / 86400);
+            $hours = floor(($time % 86400) / 3600);
+            $minutes = floor(($time % 3600) / 60);
+            $seconds = floor($time % 60);
+            echo 'You can only reset your hwid once every 48 hours.
 			You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
-			echo '</div>';
-		} else {                        
-			$this->prepare('UPDATE `users` SET `hwid` = NULL, `last_reset` = ? WHERE `username` = ?');
-			$this->statement->execute([$time, $username]);
-			Util::redirect('/');
-			$this->statement->execute([$time, $username]);
-			echo '<div class="alert alert-success" role="alert">
+            echo '</div>';
+        } else {
+            $this->prepare('UPDATE `users` SET `hwid` = NULL, `last_reset` = ? WHERE `username` = ?');
+            $this->statement->execute([$time, $username]);
+            Util::redirect('/');
+            $this->statement->execute([$time, $username]);
+            echo '<div class="alert alert-success" role="alert">
 			<strong>Success!</strong> Your HWID has been reset.
 			</div>';
-		}
-	}
+        }
+    }
 
-	// Activates subscription
-	protected function subscription($subCode, $username) {
+    // Activates subscription
+    protected function subscription($subCode, $username)
+    {
+        $sub = $this->subActiveCheck($username);
 
-		$sub = $this->subActiveCheck($username);
+        if ($sub <= 0) {
+            $date = new DateTime(); // Get current date
+            $date->add(new DateInterval('P32D')); // Adds 32 days
+            $subTime = $date->format('Y-m-d'); // Format Year-Month-Day
 
-		if ($sub <= 0) {
+            $this->prepare('UPDATE `users` SET `sub` = ? WHERE `username` = ?');
 
-			$date = new DateTime(); // Get current date
-			$date->add(new DateInterval('P32D')); // Adds 32 days
-			$subTime = $date->format('Y-m-d'); // Format Year-Month-Day
-	
-			$this->prepare('UPDATE `users` SET `sub` = ? WHERE `username` = ?');
-			
-			if ($this->statement->execute([$subTime, $username])) {
-	
-				// Delete the sub code 
-				$this->prepare('DELETE FROM `subscription` WHERE `code` = ?');
-				$this->statement->execute([$subCode]);
-				return 'Your subscription is now active!';
-	
-			} else {
+            if ($this->statement->execute([$subTime, $username])) {
 
-				return 'Something went wrong';
-
-			}
-
-		} else {
-
-			return 'You already have an active subscription!';
-		
-		}
-
-	}
+                // Delete the sub code
+                $this->prepare('DELETE FROM `subscription` WHERE `code` = ?');
+                $this->statement->execute([$subCode]);
+                return 'Your subscription is now active!';
+            } else {
+                return 'Something went wrong';
+            }
+        } else {
+            return 'You already have an active subscription!';
+        }
+    }
 
 
-	// Get number of users
-	protected function userCount() {
-		
-		$this->prepare('SELECT * FROM `users`');
-		$this->statement->execute();
-		$result = $this->statement->rowCount();
-		return $result;
+    // Get number of users
+    protected function userCount()
+    {
+        $this->prepare('SELECT * FROM `users`');
+        $this->statement->execute();
+        $result = $this->statement->rowCount();
+        return $result;
+    }
 
-	}
+    // Get number of banned users
+    protected function bannedUserCount()
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `banned` =  1');
+        $this->statement->execute();
+        $result = $this->statement->rowCount();
+        return $result;
+    }
 
-	// Get number of banned users
-	protected function bannedUserCount() {
-		
-		$this->prepare('SELECT * FROM `users` WHERE `banned` =  1');
-		$this->statement->execute();
-		$result = $this->statement->rowCount();
-		return $result;
+    //  Get DCID
+    protected function getDCID()
+    {
+        $this->prepare('SELECT `dcid` FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$_SESSION['username']]);
+        $row = $this->statement->fetch();
+        return $row->dcid;
+    }
 
-	}
+    // Get HWID
+    protected function getHWID()
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
+        $this->statement->execute([$_SESSION['username']]);
+        $row = $this->statement->fetch();
+        return $row->hwid;
+    }
 
-	//  Get DCID
-	protected function getDCID() {
-
-		$this->prepare('SELECT `dcid` FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$_SESSION['username']]);
-		$row = $this->statement->fetch();
-		return $row->dcid;
-
-	}
-
-	// Get HWID
-	protected function getHWID() {
-
-		$this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-		$this->statement->execute([$_SESSION['username']]);
-		$row = $this->statement->fetch();
-		return $row->hwid;
-
-	}
-	
-	// Get number of users with sub
-	protected function activeUserCount() {
-
-		$this->prepare('SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()');
-		$this->statement->execute();
-		$result = $this->statement->rowCount();
-		return $result;
-
-	}
+    // Get number of users with sub
+    protected function activeUserCount()
+    {
+        $this->prepare('SELECT * FROM `users` WHERE `sub` > CURRENT_DATE()');
+        $this->statement->execute();
+        $result = $this->statement->rowCount();
+        return $result;
+    }
 
 
-	// Get name of latest registered user
-	protected function newUser() {
-		
-		$this->prepare('SELECT `username` FROM `users` WHERE `uid` = (SELECT MAX(`uid`) FROM `users`)');
-		$this->statement->execute();
-		$result = $this->statement->fetch();
-		return $result->username;
-
-	}
-
+    // Get name of latest registered user
+    protected function newUser()
+    {
+        $this->prepare('SELECT `username` FROM `users` WHERE `uid` = (SELECT MAX(`uid`) FROM `users`)');
+        $this->statement->execute();
+        $result = $this->statement->fetch();
+        return $result->username;
+    }
 }

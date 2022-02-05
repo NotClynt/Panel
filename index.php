@@ -7,24 +7,24 @@ include 'includes/db.php';
 
 
 
-$user = new UserController;
-$cheat = new CheatController;
+$user = new UserController();
+$cheat = new CheatController();
 
 Session::init();
 
-if (!Session::isLogged()) { Util::redirect('/login.php'); }
+if (!Session::isLogged()) {
+    Util::redirect('/login.php');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-	if (isset($_POST["updatePassword"])) {
-		$error = $user->updateUserPass($_POST);
-	}
-
-
-	if (isset($_POST["activateSub"])) {
-		$error = $user->activateSub($_POST);
+    if (isset($_POST["updatePassword"])) {
+        $error = $user->updateUserPass($_POST);
     }
 
+
+    if (isset($_POST["activateSub"])) {
+        $error = $user->activateSub($_POST);
+    }
 }
 $uid = Session::get("uid");
 $admin = Session::get("admin");
@@ -41,23 +41,23 @@ $row = $result->fetch_assoc();
 $motd = $row["motd"];
 
 
-if(isset($_POST['reset_discord'])) {
-	$sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
-	$sql2 = "UPDATE users SET verifycode = '' WHERE uid = '$uid'";
-	$result = mysqli_query($mysqli, $sql);
-	$result = mysqli_query($mysqli, $sql2);
-	Util::redirect('/');
-	mysqli_query($mysqli, $sql);
+if (isset($_POST['reset_discord'])) {
+    $sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
+    $sql2 = "UPDATE users SET verifycode = '' WHERE uid = '$uid'";
+    $result = mysqli_query($mysqli, $sql);
+    $result = mysqli_query($mysqli, $sql2);
+    Util::redirect('/');
+    mysqli_query($mysqli, $sql);
 }
 
-if(isset($_POST['reset_hwid'])) {
-	$time = time();
-	$sql = "SELECT * FROM users WHERE uid = '$uid'";
-	$result = mysqli_query($mysqli, $sql);
-	$row = mysqli_fetch_assoc($result);
-	$last_reset = $row['last_reset'];
-	if($time - $last_reset < 172800) {
-		echo '<div class="alert alert-danger" role="alert">
+if (isset($_POST['reset_hwid'])) {
+    $time = time();
+    $sql = "SELECT * FROM users WHERE uid = '$uid'";
+    $result = mysqli_query($mysqli, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $last_reset = $row['last_reset'];
+    if ($time - $last_reset < 172800) {
+        echo '<div class="alert alert-danger" role="alert">
         <strong>Error!</strong>';
         $time = 172800 - ($time - $last_reset);
         $days = floor($time / 86400);
@@ -67,7 +67,7 @@ if(isset($_POST['reset_hwid'])) {
         echo 'You can only reset your hwid once every 48 hours.
         You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
         echo '</div>';
-    } else {                        
+    } else {
         $sql = "UPDATE users SET hwid = NULL WHERE uid = '$uid'";
         $result = mysqli_query($mysqli, $sql);
         Util::redirect('/');
@@ -181,8 +181,8 @@ if(isset($_POST['reset_hwid'])) {
 </div>
 <div class="col-md-8 text-right">
 <div class="info">
-<?php 
-if($hwid != '') { ?>
+<?php
+if ($hwid != '') { ?>
 <form method="POST" action="">
 <button class="button primary outline rounded-circle low-padding low-weight medium-size" name="reset_hwid" type="submit" value="submit"><i class="fas fa-microchip"></i> Reset HWID</button>
 </form>
@@ -200,11 +200,11 @@ if($hwid != '') { ?>
 <div class="col-6">
 <div class="title">
 <span>DISCORD</span>
-<?php if($dcid == '') { ?>
+<?php if ($dcid == '') { ?>
 <span>Unlinked</span> <?php } else { ?> <span style="color:var(--primary)">Linked</span> <?php } ?> </div>
 </div>
 <div class="col-6 text-right">
-<?php if($dcid == '') { ?>
+<?php if ($dcid == '') { ?>
 <a href="https://discord.com/api/oauth2/authorize?client_id=931555054392078357&redirect_uri=https%3A%2F%2Fyourdomain.com%2Fpanel%2Fapi%2Fdiscod.php&response_type=code&scope=identify%20guilds.join">
 <button class="button primary outline rounded-circle low-padding low-weight medium-size"><i class="fab fa-discord"></i> Link Discord</button>
 </a>
@@ -287,11 +287,11 @@ if($hwid != '') { ?>
 </div>
 </div>
 <?php endif; ?>
-<?php 
+<?php
 $sql = "SELECT * FROM users WHERE username = '$username'";
 $result = $mysqli->query($sql);
 if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         if ($row["reseller"] == 1) {
             echo '
             <div class="col-lg-6">

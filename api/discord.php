@@ -18,7 +18,7 @@ $authorizeURL = 'https://discord.com/api/oauth2/authorize';
 $tokenURL = 'https://discord.com/api/oauth2/token';
 $apiURLBase = 'https://discord.com/api/users/@me';
 
-$user = new UserController;
+$user = new UserController();
 
 Session::init();
 
@@ -30,80 +30,76 @@ if (!isset($_SESSION["login"])) {
     die("You are not logged in. Please <a href='https://domain/panel/login.php'>login</a>.");
 }
 
-if(get('code')) {
-
-  $token = apiRequest($tokenURL, array(
+if (get('code')) {
+    $token = apiRequest($tokenURL, array(
     "grant_type" => "authorization_code",
     'client_id' => OAUTH2_CLIENT_ID,
     'client_secret' => OAUTH2_CLIENT_SECRET,
     'redirect_uri' => 'https://domain/panel/api/discord.php',
     'code' => get('code')
   ));
-  $logout_token = $token->access_token;
-  $_SESSION['access_token'] = $token->access_token;
+    $logout_token = $token->access_token;
+    $_SESSION['access_token'] = $token->access_token;
 
 
-  header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Location: ' . $_SERVER['PHP_SELF']);
 }
 
-if(session('access_token')) {
-  $user = apiRequest($apiURLBase);
- 
-  $headers = array(
+if (session('access_token')) {
+    $user = apiRequest($apiURLBase);
+
+    $headers = array(
             'Content-Type: application/json',
             'Authorization: Bot OTMxNTU1MDU0MzkyMDc4MzU3.YeGIQA.rh6DpWF9hladlFpccrl59Zj-N4E' // add your bot token here
         );
-        $data = array("access_token" => session('access_token'));
+    $data = array("access_token" => session('access_token'));
     $data_string = json_encode($data);
-	
-                $url = "https://discord.com/api/guilds/919531932054872065/members/". $user->id; // replace 919531932054872065 with your guild id
-                $ch = curl_init($url);
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT"); 
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string); 
-                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-                curl_exec($ch);
-                curl_close($ch);
 
-        if ($_SESSION["login"]) {
-            $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
-            $stmt->bind_param("is", $user->id, $username);
-            $stmt->execute();
-            $stmt->close();
+    $url = "https://discord.com/api/guilds/919531932054872065/members/". $user->id; // replace 919531932054872065 with your guild id
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+    curl_exec($ch);
+    curl_close($ch);
 
-            $role = "919533220641513483";
-        }
-        else if ($_SESSION["admin"]) {
-            $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
-            $stmt->bind_param("is", $user->id, $username);
-            $stmt->execute();
-            $stmt->close();
-            
-            $role = "919533212030623774";
-        }
-        // else if ($_SESSION["reseller"]) {
-        //     $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
-        //     $stmt->bind_param("is", $user->id, $username);
-        //     $stmt->execute();
-        //     $stmt->close();
+    if ($_SESSION["login"]) {
+        $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
+        $stmt->bind_param("is", $user->id, $username);
+        $stmt->execute();
+        $stmt->close();
 
-        //     $role = "919533220570210354";
-        // }
+        $role = "919533220641513483";
+    } elseif ($_SESSION["admin"]) {
+        $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
+        $stmt->bind_param("is", $user->id, $username);
+        $stmt->execute();
+        $stmt->close();
+
+        $role = "919533212030623774";
+    }
+    // else if ($_SESSION["reseller"]) {
+    //     $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
+    //     $stmt->bind_param("is", $user->id, $username);
+    //     $stmt->execute();
+    //     $stmt->close();
+
+    //     $role = "919533220570210354";
+    // }
 
 
 
     $url = "https://discord.com/api/guilds/919531932054872065/members/". $user->id. "/roles/{$role}"; // replace 919531932054872065 with your guild id
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT"); 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string); 
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-	curl_exec($ch);
+    curl_exec($ch);
     curl_close($ch);
-    
-
 } else {
-  die("Not logged into Discord!");
+    die("Not logged into Discord!");
 }
 
 
@@ -122,63 +118,69 @@ if(session('access_token')) {
 //   die();
 // }
 
-if(get('action') == 'logout') {
-  $url = "https://discord.com/api/guilds/919531932054872065/members/". $user->id;
-  $ch = curl_init($url);
-  curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+if (get('action') == 'logout') {
+    $url = "https://discord.com/api/guilds/919531932054872065/members/". $user->id;
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
     'Content-Type: application/json',
     'Authorization: Bot OTMxNTU1MDU0MzkyMDc4MzU3.YeGIQA.rh6DpWF9hladlFpccrl59Zj-N4E' // add your bot token here
   ));
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
-  curl_exec($ch);
-  curl_close($ch);
-  unset($_SESSION['access_token']);
-  header('Location: ' . $_SERVER['PHP_SELF']);
-  die();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+    curl_exec($ch);
+    curl_close($ch);
+    unset($_SESSION['access_token']);
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    die();
 }
 
-function apiRequest($url, $post=FALSE, $headers=array()) {
-  $ch = curl_init($url);
-  curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+function apiRequest($url, $post=false, $headers=array())
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-  $response = curl_exec($ch);
+    $response = curl_exec($ch);
 
 
-  if($post)
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+    if ($post) {
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+    }
 
-  $headers[] = 'Accept: application/json';
+    $headers[] = 'Accept: application/json';
 
-  if(session('access_token'))
-    $headers[] = 'Authorization: Bearer ' . session('access_token'); 
+    if (session('access_token')) {
+        $headers[] = 'Authorization: Bearer ' . session('access_token');
+    }
 
-  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-  $response = curl_exec($ch);
-  return json_decode($response);
+    $response = curl_exec($ch);
+    return json_decode($response);
 }
 
-function logout($url, $data=array()) {
-  $ch = curl_init($url);
-  curl_setopt_array($ch, array(
-      CURLOPT_POST => TRUE,
-      CURLOPT_RETURNTRANSFER => TRUE,
+function logout($url, $data=array())
+{
+    $ch = curl_init($url);
+    curl_setopt_array($ch, array(
+      CURLOPT_POST => true,
+      CURLOPT_RETURNTRANSFER => true,
       CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
       CURLOPT_HTTPHEADER => array('Content-Type: application/x-www-form-urlencoded'),
       CURLOPT_POSTFIELDS => http_build_query($data),
   ));
-  $response = curl_exec($ch);
-  return json_decode($response);
+    $response = curl_exec($ch);
+    return json_decode($response);
 }
 
-function get($key, $default=NULL) {
-  return array_key_exists($key, $_GET) ? $_GET[$key] : $default;
+function get($key, $default=null)
+{
+    return array_key_exists($key, $_GET) ? $_GET[$key] : $default;
 }
 
-function session($key, $default=NULL) {
-  return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : $default;
+function session($key, $default=null)
+{
+    return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : $default;
 }
 
 
