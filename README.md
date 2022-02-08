@@ -27,6 +27,11 @@ Examples for the API you find on [GitHub - clynt707/panel-v2-resources](https://
 
 ---
 
+### Want a own panel?
+Hire me [here](https://clynt.sellix.io/product/61f7f67baa3c3)
+
+---
+
 #### Preview
 
 <img title="" src="https://clynt.de/preview.png" alt="" data-align="center">
