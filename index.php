@@ -68,17 +68,16 @@ if (isset($_POST['reset_hwid'])) {
         You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
         echo '</div>';
     } else {
-		$time = time();
+        $time = time();
         $sql = "UPDATE users SET hwid = NULL WHERE uid = '$uid'";
-		$sql2 = "UPDATE users SET last_reset = '$time' WHERE uid = '$uid'";
+        $sql2 = "UPDATE users SET last_reset = '$time' WHERE uid = '$uid'";
         $result = mysqli_query($mysqli, $sql);
-		$result = mysqli_query($mysqli, $sql2);
+        $result = mysqli_query($mysqli, $sql2);
         Util::redirect('/');
         mysqli_query($mysqli, $sql);
         echo '<div class="alert alert-success" role="alert">
         <strong>Success!</strong> Your HWID has been reset.
         </div>';
-		
     }
 }
 
