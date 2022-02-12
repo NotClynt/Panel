@@ -47,7 +47,8 @@ class Admin extends Database
     }
 
     // Invite wave - create invite codes and send them to users
-    protected function invCodeWave($code) {
+    protected function invCodeWave($code)
+    {
         $this->prepare('SELECT * FROM `users`');
         $this->statement->execute();
         $userList = array();

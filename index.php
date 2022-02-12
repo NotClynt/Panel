@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["resetDiscord"])) {
         $error = $user->resetDiscord($_POST);
     }
-
 }
 $uid = Session::get("uid");
 $admin = Session::get("admin");

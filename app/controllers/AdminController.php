@@ -46,8 +46,9 @@ class AdminController extends Admin
         return $this->invCodeGen($code, $username);
     }
 
-    // 
-    public function getInvWaveGen() {
+    //
+    public function getInvWaveGen()
+    {
         $code = Util::randomCode(20);
         return $this->invCodeWave($code);
     }
