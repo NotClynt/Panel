@@ -22,6 +22,4 @@ class ResellerController extends Reseller
     {
         return $this->balance();
     }
-
-
 }

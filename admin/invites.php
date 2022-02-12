@@ -49,9 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     header("location: invites");
 
-	if (isset($_POST["invWave"])) {
-
-		$admin->getInvWaveGen($username);
+    if (isset($_POST["invWave"])) {
+        $admin->getInvWaveGen($username);
 
         $webhook = INVITE_WEBHOOK;
         $embed = array(
@@ -72,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // send webhook
         $context  = stream_context_create($options);
         $result = file_get_contents($webhook, false, $context);
-
     }
 
     header("location: invites");
