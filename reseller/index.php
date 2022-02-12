@@ -2,7 +2,7 @@
 
 require_once '../app/require.php';
 
-include '../includes/db.php';
+require_once '../app/controllers/ResellerController.php';
 
 $user = new UserController();
 $reseller = new ResellerController();
