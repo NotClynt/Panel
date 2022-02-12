@@ -26,9 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("location: invites");
 
     if (isset($_POST["invWave"])) {
-
         $admin->getInvWaveGen($username);
-
     }
 
 

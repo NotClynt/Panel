@@ -140,8 +140,6 @@ class Admin extends Database
 
                 $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
                 $this->statement->execute([$uid, "Made user admin"]);
-
-
             } else {
                 $this->prepare('UPDATE `users` SET `admin` = 0 WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
@@ -249,5 +247,4 @@ class Admin extends Database
             $this->statement->execute(['admin', "Updated cheat version"]);
         }
     }
-
 }

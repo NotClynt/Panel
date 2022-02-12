@@ -31,7 +31,8 @@ class Session
         return (isset($_SESSION["login"]) && $_SESSION["admin"] === 1) ? true : false;
     }
 
-    public static function isReseller() {
+    public static function isReseller()
+    {
         return (isset($_SESSION["login"]) && $_SESSION["reseller"] === 1) ? true : false;
     }
 
