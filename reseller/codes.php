@@ -4,6 +4,8 @@ require_once '../app/require.php';
 
 include '../includes/db.php';
 
+require_once '../app/controllers/ResellerController.php';
+
 
 $user = new UserController();
 
@@ -13,40 +15,11 @@ $username = Session::get("username");
 
 Util::head('Reseller Panel');
 
-function randomCode($int)
-{
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $randomString = 'Virty-';
-
-    for ($i = 0; $i < $int; $i++) {
-        $randomString .= $characters[rand(0, strlen($characters) - 1)];
-    }
-
-    return $randomString;
-}
-
-$sql = "SELECT balance FROM users WHERE username = '$username'";
-$result = $mysqli->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $balance = $row["balance"];
-    }
-}
-
+$invList = $reseller->getResellerSubCodeArray($username);
+$balance = $reseller->getBalance($username);
 
 if (isset($_POST["genCode"])) {
-    $sql = "SELECT `balance` FROM `users` WHERE `username` = '$username'";
-    $result = $mysqli->query($sql);
-    $row = $result->fetch_assoc();
-    $balance = $row["balance"];
-    if ($balance >= 1) {
-        $code = randomCode(8);
-        $sql = "INSERT INTO `license` (`code`, `createdBy`) VALUES ('$code', '$username')";
-        $result = $mysqli->query($sql);
-        $sql = "UPDATE `users` SET `balance` = `balance` - 1 WHERE `username` = '$username'";
-        $result = $mysqli->query($sql);
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Generated license code: $code', NOW())";
-        $result = $mysqli->query($sql);
+    $reseller->getResellerSubCodeGen($username);
 
         $webhook = RESELLER_WEBHOOK;
         $embed = array(
@@ -68,10 +41,6 @@ if (isset($_POST["genCode"])) {
         $context  = stream_context_create($options);
         $result = file_get_contents($webhook, false, $context);
 
-        echo '<script>window.location.href = "codes.php";</script>';
-    } else {
-        echo '<div class="alert alert-danger" role="alert">You don\'t have enough licenses to generate!</div>';
-    }
 }
 
 
@@ -113,27 +82,17 @@ if (isset($_POST["genCode"])) {
 
                     <?php endif; ?>
 
-                    <?php
-                    $sql = "SELECT * FROM users WHERE username = '$username'";
-                    $result = $mysqli->query($sql);
-                    // if user is reseller then show reseller navbar else redirect to home
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            if ($row["reseller"] == 1) {
-                                echo '<li class="nav-item">
-                        <a class="nav-link" href="'.SUB_DIR.'/reseller/index">Home</a>
-                   </li>
-                   <li class="nav-item">
-                       <a class="nav-link" href="'.SUB_DIR.'/reseller/codes">License</a>
-                   </li>
-                   <li class="nav-item">
-                       <a class="nav-link" href="'.SUB_DIR.'/index">Back</a>
-                   </li>';
-                            }
-                        }
-                    } else {
-                        echo '<script>window.location.href = "index.php";</script>';
-                    } ?>
+                    <?php if (Session::isReseller() == true) : ?>
+                    <li class="nav-item">
+                            <a class="nav-link" href="<?= SUB_DIR ?>/reseller/index">Home</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="<?= SUB_DIR ?>/reseller/codes">License</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="<?= SUB_DIR ?>/panel/">Exit</a>
+                       </li>
+                    <?php endif; ?>
 
                     <li class="nav-item">
                         <a class="nav-link" href="<?= SUB_DIR ?>/download.php">Download</a>
@@ -166,26 +125,6 @@ if (isset($_POST["genCode"])) {
 
 <div class="container mt-2">
 	<div class="row">
-
-	<?php
-    $sql = "SELECT * FROM users WHERE username = '$username'";
-    $result = $mysqli->query($sql);
-    // if user is reseller then show reseller navbar else redirect to home
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            if ($row["reseller"] == 1) {
-                echo '<div class="col-12 mt-3 mb-2">
-					<div class="rounded p-3">
-						<a href="index.php" class="btn btn-outline-primary btn-sm">Home</a>
-						<a href="codes.php" class="btn btn-outline-primary btn-sm">License</a>
-					</div>
-				</div>';
-            }
-        }
-    } else {
-        echo '<script>window.location.href = "index.php";</script>';
-    } ?>
-
 		<div class="col-12 mt-3">
 			<div class="rounded p-3 mb-3">
 				<form method="POST" action="">
@@ -216,25 +155,12 @@ if (isset($_POST["genCode"])) {
 					</tr>
 				</thead>
 				<tbody>
-
-					<?php
-                    // print only codes that are generated by the reseller
-                    $sql = "SELECT * FROM license WHERE createdBy = '$username'";
-                    $result = $mysqli->query($sql);
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<tr>
-								<td>'.$row["code"].'</td>
-								<td>'.$row["createdBy"].'</td>
-							</tr>';
-                        }
-                    } else {
-                        echo '<tr>
-							<td colspan="2">No codes generated yet!</td>
-						</tr>';
-                    }
-                    ?>
-                    
+                <?php foreach ($subList as $row) : ?>
+                    <tr>
+                        <td><?php Util::display($row->code); ?></td>
+                        <td><?php Util::display($row->createdBy); ?></td>
+                    </tr>
+                <?php endforeach; ?>
 				</tbody>
 
 			</table>

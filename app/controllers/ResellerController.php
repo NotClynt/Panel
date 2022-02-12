@@ -7,24 +7,21 @@ require_once SITE_ROOT . '/app/models/ResellerModel.php';
 
 class ResellerController extends Reseller
 {
-    //
-    public function getUserArray()
-    {
-        return $this->UserArray();
-    }
-
-
-    //
-    public function getInvCodeArray()
-    {
-        return $this->invCodeArray();
-    }
-
-
-    //
-    public function getInvCodeGen($username)
+    public function getResellerSubCodeGen($username)
     {
         $code = Util::randomCode(20);
-        return $this->invCodeGen($code, $username);
+        return $this->resellerSubCodeGen($code, $username);
     }
+
+    public function getResellerSubCodeArray($createdBy)
+    {
+        return $this->resellerSubCodeArray($createdBy);
+    }
+
+    public function getBalance()
+    {
+        return $this->balance();
+    }
+
+
 }

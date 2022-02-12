@@ -204,7 +204,7 @@ $dcid = $user->getUserDCID($uid);
                                         <div class="product box mb-3">
                                             <div class="row">
                                                 <div class="col-4">
-                                                    <h2>Virty <span style="color: var(--primary); font-weight:700; font-size: .9rem;">V<?php Util::display($cheat->getCheatData()->version); ?></span></h2>
+                                                    <h2><?php Util::display(SITE_NAME); ?> <span style="color: var(--primary); font-weight:700; font-size: .9rem;">V<?php Util::display($cheat->getCheatData()->version); ?></span></h2>
                                                 </div>
                                                 <div class="col-8 text-right">
                                                     <a href="download.php" class="button primary outline rounded-circle low-padding low-weight medium-size">Download</a>
@@ -409,7 +409,7 @@ $dcid = $user->getUserDCID($uid);
                                                     <div class="col-md-7">
                                                         <div class="d-flex align-items-center">
                                                             <div class="user">
-                                                                <h3 class="mb-0">Virty Panel</h3>
+                                                                <h3 class="mb-0"><?php Util::display(SITE_NAME); ?> Panel</h3>
                                                                 <span>• Beta v0.6<span>
                                                             </div>
                                                         </div>
@@ -437,7 +437,7 @@ $dcid = $user->getUserDCID($uid);
                                                     <div class="col-md-7">
                                                         <div class="d-flex align-items-center">
                                                             <div class="user">
-                                                                <h3 class="mb-0">Virty Selfbot</h3>
+                                                                <h3 class="mb-0"><?php Util::display(SITE_NAME); ?> Selfbot</h3>
                                                                 <span>• v3<span>
                                                             </div>
                                                         </div>

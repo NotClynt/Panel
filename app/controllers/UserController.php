@@ -17,6 +17,7 @@ class UserController extends Users
         Session::set("username", $user->username);
         //Session::set("hwid", $user->hwid);
         Session::set("admin", (int) $user->admin);
+        Session::set("reseller", (int) $user->reseller);
         Session::set("banned", (int) $user->banned);
         //Session::set("invitedBy", $user->invitedBy);
         //Session::set("createdBy", $user->createdBy);
@@ -164,7 +165,6 @@ class UserController extends Users
         }
     }
 
-
     public function activateSub($data)
     {
 
@@ -231,6 +231,10 @@ class UserController extends Users
                 return 'Your current does not match.';
             }
         }
+    }
+
+    public function getUnusedInvites() {
+        return $this->unusedInviteCodes();
     }
 
     public function getUserDCID()

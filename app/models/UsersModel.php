@@ -25,7 +25,7 @@ class Users extends Database
     // Check if invite code is valid
     protected function invCodeCheck($invCode)
     {
-        $this->prepare('SELECT * FROM `license` WHERE `code` = ?');
+        $this->prepare('SELECT * FROM `invites` WHERE `code` = ?');
         $this->statement->execute([$invCode]);
 
         if ($this->statement->rowCount() > 0) {
@@ -95,7 +95,7 @@ class Users extends Database
     {
 
         // Get inviter's username
-        $this->prepare('SELECT `createdBy` FROM `license` WHERE `code` = ?');
+        $this->prepare('SELECT `createdBy` FROM `invites` WHERE `code` = ?');
         $this->statement->execute([$invCode]);
         $row = $this->statement->fetch();
         $inviter = $row->createdBy;
@@ -107,7 +107,7 @@ class Users extends Database
         if ($this->statement->execute([$username, $hashedPassword, $inviter])) {
 
             // Delete invite code // used
-            $this->prepare('DELETE FROM `license` WHERE `code` = ?');
+            $this->prepare('DELETE FROM `invites` WHERE `code` = ?');
             $this->statement->execute([$invCode]);
             return true;
         } else {
@@ -187,6 +187,13 @@ class Users extends Database
         }
     }
 
+    // Select unused invite codes
+    protected function unusedInviteCodes()
+    {
+        $this->prepare('SELECT * FROM `invites` WHERE `used` = ?');
+        $this->statement->execute([0]);
+        return $this->statement->fetchAll();
+    }
 
     // Get number of users
     protected function userCount()

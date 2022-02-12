@@ -12,7 +12,7 @@ $username = Session::get("username");
 
 
 
-
+Util::resellerCheck();
 Util::head('Reseller Panel');
 
 
@@ -54,27 +54,17 @@ Util::head('Reseller Panel');
 
                     <?php endif; ?>
 
-                    <?php
-                    $sql = "SELECT * FROM users WHERE username = '$username'";
-                    $result = $mysqli->query($sql);
-                    // if user is reseller then show reseller navbar else redirect to home
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            if ($row["reseller"] == 1) {
-                                echo '<li class="nav-item">
-                            <a class="nav-link" href="'.SUB_DIR.'/reseller/index">Home</a>
+                    <?php if (Session::isReseller() == true) : ?>
+                    <li class="nav-item">
+                            <a class="nav-link" href="<?= SUB_DIR ?>/reseller/index">Home</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="'.SUB_DIR.'/reseller/codes">License</a>
+                           <a class="nav-link" href="<?= SUB_DIR ?>/reseller/codes">License</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="'.SUB_DIR.'panel/index">Panel</a>
-                       </li>';
-                            }
-                        }
-                    } else {
-                        echo '<script>window.location.href = "index.php";</script>';
-                    } ?>
+                           <a class="nav-link" href="<?= SUB_DIR ?>/panel/">Exit</a>
+                       </li>
+                    <?php endif; ?>
 
                     <li class="nav-item">
                         <a class="nav-link" href="<?= SUB_DIR ?>/download.php">Download</a>

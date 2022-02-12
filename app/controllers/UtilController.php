@@ -78,4 +78,10 @@ class Util
             Util::redirect('/index.php');
         }
     }
+
+    public static function resellerCheck() {
+        if (!Session::isReseller()) {
+            Util::redirect('/index.php');
+        }
+    }
 }
