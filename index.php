@@ -84,7 +84,7 @@ $dcid = $user->getUserDCID($uid);
                             <div class="col-12">
                                 <div class="profile box">
                                     <div class="logout">
-                                        <a href=""><i class="fas fa-sign-out-alt"></i></a>
+                                        <a href="logout"><i class="fas fa-sign-out-alt"></i></a>
                                     </div>
                                     <div class="row justify-content-center text-center">
                                         <div class="col-12">

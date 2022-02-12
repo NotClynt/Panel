@@ -8,6 +8,7 @@ require_once '../app/controllers/ResellerController.php';
 
 
 $user = new UserController();
+$reseller = new ResellerController();
 
 Session::init();
 
@@ -63,15 +64,6 @@ if (isset($_POST["genCode"])) {
 
                 <!-- Check if logged in -->
                 <?php if (Session::isLogged() == true) : ?>
-
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= SUB_DIR ?>/index">Home</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= SUB_DIR ?>/profile">Profile</a>
-                    </li>
 
                     <!-- Check if admin -->
                     <?php if (Session::isAdmin() == true) : ?>

@@ -35,6 +35,13 @@ CREATE TABLE `cheat` (
   `apikey` varchar(255) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+CREATE TABLE `logs` (
+  `id` int(11) NOT NULL,
+  `log_user` varchar(255) NOT NULL,
+  `log_action` varchar(255) NOT NULL,
+  `log_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 --
 -- Tabellenstruktur für Tabelle `invites`
