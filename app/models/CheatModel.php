@@ -23,6 +23,10 @@ class Cheat extends Database
         // Maintenance
         $result->maintenance = ((int)$result->maintenance === 0) ? '-' : 'UNDER';
 
+        // Motd text
+        $result->motd = htmlspecialchars($result->motd);
+
+
 
         return $result;
     }

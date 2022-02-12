@@ -146,11 +146,24 @@ class UserController extends Users
         }
     }
 
-    // resetUserHWID
-    public function resetuHWID($username)
-    {
-        return $this->resetUserHWID($username);
+    // reset HWID
+    public function resetHWID($uid) {
+        $result = $this->resetHWID($uid);
+        if ($result) {
+            return 'Successfully reset HWID.';
+        } else {
+            return 'Your last HWID reset is not older than 48 hours.';
+        }
     }
+
+    // Reset Discord
+    public function resetDiscord($uid) {
+        $result = $this->resetDiscord($uid);
+        if ($result) {
+            return 'Successfully reset Discord.';
+        }
+    }
+
 
     public function activateSub($data)
     {

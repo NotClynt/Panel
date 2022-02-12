@@ -25,6 +25,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["activateSub"])) {
         $error = $user->activateSub($_POST);
     }
+
+    if (isset($_POST["resetHWID"])) {
+        $error = $user->resetHWID($_POST);
+    }
+
+    if (isset($_POST["resetDiscord"])) {
+        $error = $user->resetDiscord($_POST);
+    }
+
 }
 $uid = Session::get("uid");
 $admin = Session::get("admin");
@@ -35,52 +44,6 @@ Util::banCheck();
 $hwid = $user->getUserHWID($uid);
 $dcid = $user->getUserDCID($uid);
 
-$sql = "SELECT motd FROM `cheat`";
-$result = $mysqli->query($sql);
-$row = $result->fetch_assoc();
-$motd = $row["motd"];
-
-
-if (isset($_POST['reset_discord'])) {
-    $sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
-    $sql2 = "UPDATE users SET verifycode = '' WHERE uid = '$uid'";
-    $result = mysqli_query($mysqli, $sql);
-    $result = mysqli_query($mysqli, $sql2);
-    Util::redirect('/');
-    mysqli_query($mysqli, $sql);
-}
-
-if (isset($_POST['reset_hwid'])) {
-    $time = time();
-    $sql = "SELECT * FROM users WHERE uid = '$uid'";
-    $result = mysqli_query($mysqli, $sql);
-    $row = mysqli_fetch_assoc($result);
-    $last_reset = $row['last_reset'];
-    if ($time - $last_reset < 172800) {
-        echo '<div class="alert alert-danger" role="alert">
-        <strong>Error!</strong>';
-        $time = 172800 - ($time - $last_reset);
-        $days = floor($time / 86400);
-        $hours = floor(($time % 86400) / 3600);
-        $minutes = floor(($time % 3600) / 60);
-        $seconds = floor($time % 60);
-        echo ' You can only reset your hwid once every 48 hours.
-        You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
-        echo '</div>';
-    } else {
-		$time = time();
-        $sql = "UPDATE users SET hwid = NULL WHERE uid = '$uid'";
-		$sql2 = "UPDATE users SET last_reset = '$time' WHERE uid = '$uid'";
-        $result = mysqli_query($mysqli, $sql);
-		$result = mysqli_query($mysqli, $sql2);
-        Util::redirect('/');
-        mysqli_query($mysqli, $sql);
-        echo '<div class="alert alert-success" role="alert">
-        <strong>Success!</strong> Your HWID has been reset.
-        </div>';
-		
-    }
-}
 
 ?>
 <!DOCTYPE html>
@@ -248,7 +211,7 @@ if (isset($_POST['reset_hwid'])) {
                                                 </div>
                                             </div>
                                             <div class="box d-flex justify-content-center mb-0">
-                                                <span><?php echo $motd ?></span>
+                                                <span><?php Util::display($cheat->getCheatData()->motd); ?></span>
                                             </div>
                                         </div>
                                         <div class="messages box mb-3">

@@ -135,33 +135,30 @@ class Users extends Database
     }
 
     // Reset HWID
-    protected function resetUserHWID($username)
-    {
+    protected function resetUserHWID($uid) {
         $time = time();
-        $this->prepare('SELECT * FROM `users` WHERE `username` = ?');
-        $this->statement->execute([$username]);
+        $this->prepare('SELECT * FROM `users` WHERE `uid` = ?');
+        $this->statement->execute([$uid]);
         $row = $this->statement->fetch();
         $last_reset = $row->last_reset;
-        if ($time - $last_reset < 172800) {
-            echo '<div class="alert alert-danger" role="alert">
-			<strong>Error!</strong>';
-            $time = 172800 - ($time - $last_reset);
-            $days = floor($time / 86400);
-            $hours = floor(($time % 86400) / 3600);
-            $minutes = floor(($time % 3600) / 60);
-            $seconds = floor($time % 60);
-            echo 'You can only reset your hwid once every 48 hours.
-			You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
-            echo '</div>';
+
+        if($time - $last_reset < 172800) {
+            return false; 
         } else {
-            $this->prepare('UPDATE `users` SET `hwid` = NULL, `last_reset` = ? WHERE `username` = ?');
-            $this->statement->execute([$time, $username]);
-            Util::redirect('/');
-            $this->statement->execute([$time, $username]);
-            echo '<div class="alert alert-success" role="alert">
-			<strong>Success!</strong> Your HWID has been reset.
-			</div>';
+            $this -> prepare('UPDATE `users` SET `hwid` = ?, `last_reset` = ? WHERE `uid` = ?');
+            $this -> statement -> execute([null, $time, $uid]);
+
+            $this -> prepare('UPDATE `users` SET `last_reset` = ? WHERE `uid` = ?');
+            $this -> statement -> execute([$time, $uid]);
+            return true;
         }
+    }
+
+    // Reset Discord
+    protected function resetUserDiscord($uid) {
+        $this -> prepare('UPDATE `users` SET `discord` = ? WHERE `uid` = ?');
+        $this -> statement -> execute([null, $uid]);
+        return true;
     }
 
     // Activates subscription
