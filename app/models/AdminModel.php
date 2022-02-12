@@ -28,7 +28,7 @@ class Admin extends Database
     protected function invCodeArray()
     {
         if (Session::isAdmin()) {
-            $this->prepare('SELECT * FROM `license`');
+            $this->prepare('SELECT * FROM `invites`');
             $this->statement->execute();
 
             $result = $this->statement->fetchAll();
@@ -41,28 +41,26 @@ class Admin extends Database
     protected function invCodeGen($code, $createdBy)
     {
         if (Session::isAdmin()) {
-            $this->prepare('INSERT INTO `license` (`code`, `createdBy`) VALUES (?, ?)');
+            $this->prepare('INSERT INTO `invites` (`code`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$code, $createdBy]);
         }
     }
 
     // Invite wave - create invite codes and send them to users
-    protected function invWave($wave)
-    {
-        if (Session::isAdmin()) {
-            $this->prepare('SELECT * FROM `users` WHERE `wave` = ?');
-            $this->statement->execute([$wave]);
-
-            $result = $this->statement->fetchAll();
-
-            foreach ($result as $row) {
-                $code = $this->invCodeGen($row['uid'], $row['uid']);
-
-                $this->prepare('INSERT INTO `invites` (`uid`, `code`, `wave`) VALUES (?, ?, ?)');
-                $this->statement->execute([$row['uid'], $code, $wave]);
-            }
+    protected function invCodeWave($code, $createdBy) {
+        $this->prepare('SELECT * FROM `users`');
+        $this->statement->execute();
+        $userList = array();
+        while ($row = $this->statement->fetch()) {
+            $userList[] = $row['username'];
+        }
+        foreach ($userList as $user) {
+            $this->prepare('INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES (?, ?, ?)');
+            $this->statement->execute([$code, $user, date('Y-m-d H:i:s')]);
         }
     }
+
+
 
     // Get array of all subscription codes
     protected function subCodeArray()

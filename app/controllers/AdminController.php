@@ -46,10 +46,10 @@ class AdminController extends Admin
         return $this->invCodeGen($code, $username);
     }
 
-    //
-    public function getInvWave($username)
-    {
-        return $this->invWave($username);
+    // 
+    public function getInvWaveGen() {
+        $code = Util::randomCode(20);
+        return $this->invCodeWave($code);
     }
 
     //
@@ -84,12 +84,6 @@ class AdminController extends Admin
     public function setCheatStatus()
     {
         return $this->cheatStatus();
-    }
-
-    //
-    public function setMotd($motd)
-    {
-        return $this->motd($motd);
     }
 
     //
