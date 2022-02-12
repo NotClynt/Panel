@@ -64,17 +64,21 @@ if (isset($_POST['reset_hwid'])) {
         $hours = floor(($time % 86400) / 3600);
         $minutes = floor(($time % 3600) / 60);
         $seconds = floor($time % 60);
-        echo 'You can only reset your hwid once every 48 hours.
+        echo ' You can only reset your hwid once every 48 hours.
         You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
         echo '</div>';
     } else {
+		$time = time();
         $sql = "UPDATE users SET hwid = NULL WHERE uid = '$uid'";
+		$sql2 = "UPDATE users SET last_reset = '$time' WHERE uid = '$uid'";
         $result = mysqli_query($mysqli, $sql);
+		$result = mysqli_query($mysqli, $sql2);
         Util::redirect('/');
         mysqli_query($mysqli, $sql);
         echo '<div class="alert alert-success" role="alert">
         <strong>Success!</strong> Your HWID has been reset.
         </div>';
+		
     }
 }
 
