@@ -135,15 +135,16 @@ class Users extends Database
     }
 
     // Reset HWID
-    protected function resetUserHWID($uid) {
+    protected function resetUserHWID($uid)
+    {
         $time = time();
         $this->prepare('SELECT * FROM `users` WHERE `uid` = ?');
         $this->statement->execute([$uid]);
         $row = $this->statement->fetch();
         $last_reset = $row->last_reset;
 
-        if($time - $last_reset < 172800) {
-            return false; 
+        if ($time - $last_reset < 172800) {
+            return false;
         } else {
             $this -> prepare('UPDATE `users` SET `hwid` = ?, `last_reset` = ? WHERE `uid` = ?');
             $this -> statement -> execute([null, $time, $uid]);
@@ -155,7 +156,8 @@ class Users extends Database
     }
 
     // Reset Discord
-    protected function resetUserDiscord($uid) {
+    protected function resetUserDiscord($uid)
+    {
         $this -> prepare('UPDATE `users` SET `discord` = ? WHERE `uid` = ?');
         $this -> statement -> execute([null, $uid]);
         return true;
