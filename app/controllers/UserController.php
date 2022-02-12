@@ -233,8 +233,8 @@ class UserController extends Users
         }
     }
 
-    public function getUnusedInvites() {
-        return $this->unusedInviteCodes();
+    public function getUnusedInvites($username) {
+        return $this->unusedInviteCodes($username);
     }
 
     public function getUserDCID()

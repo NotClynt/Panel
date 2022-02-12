@@ -4,8 +4,6 @@ require_once '../app/require.php';
 require_once '../app/controllers/AdminController.php';
 require_once '../app/controllers/CheatController.php';
 
-include '../includes/db.php';
-
 $user = new UserController();
 $cheat = new CheatController();
 $admin = new AdminController();
@@ -22,118 +20,28 @@ Util::navbar();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["cheatStatus"])) {
         $admin->setCheatStatus();
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Set cheat status to " . $_POST['cheatStatus'] . "', NOW())";
 
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "Cheat Status",
-            "description" => "$username has set the cheat status to " . $_POST['cheatStatus'],
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
-
-        $result = $mysqli->query($sql);
     }
 
     if (isset($_POST["cheatMaint"])) {
         $admin->setCheatMaint();
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Set cheat maintenance to " . $_POST['cheatMaint'] . "', NOW())";
 
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "Cheat Maintenance",
-            "description" => "$username has set the cheat maintenance to " . $_POST['cheatMaint'],
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
-        $result = $mysqli->query($sql);
     }
 
     if (isset($_POST["cheatVersion"])) {
         $ver = floatval($_POST['version']);
         $admin->setCheatVersion($ver);
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Set cheat version to " . $_POST['version'] . "', NOW())";
 
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "Cheat Version",
-            "description" => "$username has set the cheat version to " . $_POST['version'],
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
+    }
 
-        $result = $mysqli->query($sql);
+    if (isset($_POST['set_motd'])) {
+        $motd = $_POST['motd'];
+        $admin->setCheatMotd($motd);
     }
 
     header("location: cheat");
 }
 
-if (isset($_POST['set_motd'])) {
-    // update motd in cheat table
-    $motd = $_POST['motd'];
-    $sql = "UPDATE cheat SET motd = '$motd'";
-    $result = mysqli_query($mysqli, $sql);
-    $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Set MOTD to " . $_POST['motd'] . "', NOW())";
-
-    $webhook = ADMIN_WEBHOOK;
-    $embed = array(
-        "title" => "MOTD",
-        "description" => "$username has set the MOTD to " . $_POST['motd'],
-        "color" => 0x00ff00
-    );
-    $data = array(
-        "embeds" => array($embed)
-    );
-    $options = array(
-        'http' => array(
-            'header'  => "Content-type: application/json\r\n",
-            'method'  => 'POST',
-            'content' => json_encode($data)
-        )
-    );
-    // send webhook
-    $context  = stream_context_create($options);
-    $result = file_get_contents($webhook, false, $context);
-
-    $result = $mysqli->query($sql);
-    Util::redirect('/admin/cheat');
-}
 
 ?>
 

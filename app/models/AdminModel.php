@@ -47,7 +47,8 @@ class Admin extends Database
     }
 
     // Invite wave - create invite codes and send them to users
-    protected function invCodeWave($code) {
+    protected function invCodeWave($code)
+    {
         $this->prepare('SELECT * FROM `users`');
         $this->statement->execute();
         $userList = array();
@@ -81,6 +82,9 @@ class Admin extends Database
         if (Session::isAdmin()) {
             $this->prepare('INSERT INTO `subscription` (`code`, `createdBy`) VALUES (?, ?)');
             $this->statement->execute([$code, $createdBy]);
+
+            $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+            $this->statement->execute([$createdBy, "Created subscription code $code"]);
         }
     }
 
@@ -90,6 +94,9 @@ class Admin extends Database
         if (Session::isAdmin()) {
             $this->prepare('UPDATE `users` SET `hwid` = NULL WHERE `uid` = ?');
             $this->statement->execute([$uid]);
+
+            $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+            $this->statement->execute([$uid, "Reset HWID"]);
         }
     }
 
@@ -105,9 +112,15 @@ class Admin extends Database
             if ((int)$result->banned === 0) {
                 $this->prepare('UPDATE `users` SET `banned` = 1 WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute([$uid, "Banned user"]);
             } else {
                 $this->prepare('UPDATE `users` SET `banned` = 0 WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute([$uid, "Unbanned user"]);
             }
         }
     }
@@ -124,9 +137,17 @@ class Admin extends Database
             if ((int)$result->admin === 0) {
                 $this->prepare('UPDATE `users` SET `admin` = 1 WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute([$uid, "Made user admin"]);
+
+
             } else {
                 $this->prepare('UPDATE `users` SET `admin` = 0 WHERE `uid` = ?');
                 $this->statement->execute([$uid]);
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute([$uid, "Removed admin from user"]);
             }
         }
     }
@@ -149,6 +170,9 @@ class Admin extends Database
         if (Session::isAdmin()) {
             $this->prepare('DELETE FROM `logs`');
             $this->statement->execute();
+
+            $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+            $this->statement->execute(['admin', "Purged logs"]);
         }
     }
 
@@ -164,9 +188,15 @@ class Admin extends Database
             if ((int)$result->status === 0) {
                 $this->prepare('UPDATE `cheat` SET `status` = 1');
                 $this->statement->execute();
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute(['admin', "Enabled cheat"]);
             } else {
                 $this->prepare('UPDATE `cheat` SET `status` = 0');
                 $this->statement->execute();
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute(['admin', "Disabled cheat"]);
             }
         }
     }
@@ -183,9 +213,15 @@ class Admin extends Database
             if ((int)$result->maintenance === 0) {
                 $this->prepare('UPDATE `cheat` SET `maintenance` = 1');
                 $this->statement->execute();
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute(['admin', "Enabled cheat maintenance"]);
             } else {
                 $this->prepare('UPDATE `cheat` SET `maintenance` = 0');
                 $this->statement->execute();
+
+                $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+                $this->statement->execute(['admin', "Disabled cheat maintenance"]);
             }
         }
     }
@@ -195,6 +231,9 @@ class Admin extends Database
         if (Session::isAdmin()) {
             $this->prepare('UPDATE `cheat` SET `motd` = ?');
             $this->statement->execute([$motd]);
+
+            $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+            $this->statement->execute(['admin', "Updated cheat motd"]);
         }
     }
 
@@ -205,6 +244,10 @@ class Admin extends Database
         if (Session::isAdmin()) {
             $this->prepare('UPDATE `cheat` SET `version` = ?');
             $this->statement->execute([$ver]);
+
+            $this->prepare('INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES (?, ?, NOW())');
+            $this->statement->execute(['admin', "Updated cheat version"]);
         }
     }
+
 }

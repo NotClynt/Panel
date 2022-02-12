@@ -8,7 +8,6 @@ $admin = new AdminController();
 
 Session::init();
 
-include '../includes/db.php';
 
 $username = Session::get("username");
 
@@ -22,29 +21,6 @@ if (isset($_POST["delLogs"])) {
     $sql = "DELETE FROM `logs`";
     $result = $mysqli->query($sql);
     if ($result) {
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Deleted all logs', NOW())";
-
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "Logs Deleted",
-            "description" => "$username has deleted all logs",
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
-
-        $result = $mysqli->query($sql);
         Util::redirect('/admin/logs');
     }
 }

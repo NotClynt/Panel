@@ -3,7 +3,6 @@
 require_once 'app/require.php';
 require_once 'app/controllers/CheatController.php';
 
-include 'includes/db.php';
 
 
 
@@ -33,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["resetDiscord"])) {
         $error = $user->resetDiscord($_POST);
     }
-
 }
 $uid = Session::get("uid");
 $admin = Session::get("admin");
@@ -43,7 +41,7 @@ Util::banCheck();
 
 $hwid = $user->getUserHWID($uid);
 $dcid = $user->getUserDCID($uid);
-
+$invList = $user->getUnusedInvites($username);
 
 ?>
 <!DOCTYPE html>
@@ -217,15 +215,14 @@ $dcid = $user->getUserDCID($uid);
                                         <div class="messages box mb-3">
                                             <div class="row">
                                                 <div class="col-6">
-                                                    <h2 class="mb-0">Announcements</h2>
+                                                    <h2 class="mb-0">Invites</h2>
                                                 </div>
                                                 <div class="col-6 text-right">
                                                     <a onclick="switchCarousel(1)" href="#0" class="button primary outline rounded-circle low-padding low-weight medium-size">View</a>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="changelogs box mb-2">
+                                        <!-- <div class="changelogs box mb-2">
                                             <div class="row">
                                                 <div class="col-6">
                                                     <h2 class="mb-0">Changelogs</h2>
@@ -234,19 +231,17 @@ $dcid = $user->getUserDCID($uid);
                                                     <a onclick="switchCarousel(2)" href="#0" class="button primary outline rounded-circle low-padding low-weight medium-size">View</a>
                                                 </div>
                                             </div>
+                                        </div> -->
+                                        <div class="messages box mb-3">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <h2 class="mb-0">Subscription</h2>
+                                                </div>
+                                                <div class="col-6 text-right">
+                                                    <a onclick="switchCarousel(4)" href="#0" class="button primary outline rounded-circle low-padding low-weight medium-size">View</a>
+                                                </div>
+                                            </div>
                                         </div>
-
-                                        <!-- <div class="messages box mb-3">
-<div class="row">
-<div class="col-6">
-<h2 class="mb-0">Subscription</h2>
-</div>
-<div class="col-6 text-right">
-<a onclick="switchCarousel(4)" href="#0" class="button primary outline rounded-circle low-padding low-weight medium-size">View</a>
-</div>
-</div>
-</div> -->
-
                                         <div class="row mb-2">
                                             <?php if (Session::isAdmin() == true) : ?>
                                                 <div class="col-lg-6">
@@ -265,33 +260,23 @@ $dcid = $user->getUserDCID($uid);
                                                     </div>
                                                 </div>
                                             <?php endif; ?>
-                                            <?php
-                                            $sql = "SELECT * FROM users WHERE username = '$username'";
-                                            $result = $mysqli->query($sql);
-                                            if ($result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
-                                                    if ($row["reseller"] == 1) {
-                                                        echo '
-<div class="col-lg-6">
-<div class="cape box">
-<div class="row">
-<div class="col-6 d-flex align-items-center">
-<div>
-<h2 class="mb-2" style="position: relative; left:.25rem;">Reseller</h2>
-<a href="reseller/" class="button primary outline rounded-circle low-padding low-weight medium-size" style="font-size: .6rem; padding: 0.45rem 2.0rem">Go</a>
-</div>
-</div>
-<div class="col-6 d-flex justify-content-end">
-<img src="https://cdn.discordapp.com/attachments/919533264119677018/927264353504362496/PicsArt_01-02-07.16.51.png" alt="" class="img-fluid" width="65.5rem" >
-</div>
-</div>
-</div>
-</div>
-';
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                            <?php if (Session::isReseller() == true) : ?>
+                                            <div class="col-lg-6">
+                                                <div class="cape box">
+                                                    <div class="row">
+                                                        <div class="col-6 d-flex align-items-center">
+                                                            <div>
+                                                                <h2 class="mb-2" style="position: relative; left:.25rem;">Reseller</h2>
+                                                                <a href="reseller/" class="button primary outline rounded-circle low-padding low-weight medium-size" style="font-size: .6rem; padding: 0.45rem 2.0rem">Go</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 d-flex justify-content-end">
+                                                            <img src="https://cdn.discordapp.com/attachments/919533264119677018/927264353504362496/PicsArt_01-02-07.16.51.png" alt="" class="img-fluid" width="65.5rem">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php endif; ?>
                                             <div class="col-lg-6">
                                                 <div class="cape box">
                                                     <div class="row">
@@ -333,66 +318,27 @@ $dcid = $user->getUserDCID($uid);
                                     <div class="carousel-item">
                                         <div class="title d-flex align-items-center">
                                             <i onclick="switchCarousel(0)" class="fas fa-chevron-left"></i>
-                                            <h2>Announcements</h2>
+                                            <h2>Invites</h2>
                                         </div>
-                                        <div class="announcements box mb-3">
+                                        <div class="changelogs box mb-3">
                                             <div class="title">
                                                 <div class="row">
                                                     <div class="col-md-7">
-                                                        <div class="d-flex align-items-center"><img src='https://cdn.discordapp.com/avatars/882166477157986384/a_bd85d318261a83ce725580986dc9fc6d.gif?size=2048' alt='Profile picture' class='img-fluid'>
+                                                        <div class="d-flex align-items-center">
                                                             <div class="user">
-                                                                <h3>Clynt</h3>
-                                                                <span>Admin</span>
+                                                                <h3 class="mb-0">Here are your Invite codes</h3>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-5 d-flex justify-content-end ">
-                                                        <span class="date">09/01/2022</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="box">
-                                                <p class="mb-0">Panel Update! <br>Bugfixes and more. All changes you can see in Changelog</p>
-                                            </div>
-                                        </div>
-                                        <div class="announcements box mb-3">
-                                            <div class="title">
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <div class="d-flex align-items-center"><img src='https://cdn.discordapp.com/avatars/882166477157986384/a_bd85d318261a83ce725580986dc9fc6d.gif?size=2048' alt='Profile picture' class='img-fluid'>
-                                                            <div class="user">
-                                                                <h3>Clynt</h3>
-                                                                <span>Admin</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5 d-flex justify-content-end ">
-                                                        <span class="date">08/01/2022</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="box">
-                                                <p class="mb-0">Hey guys, <br>the Dashboard have a new Design.</p>
-                                            </div>
-                                        </div>
-                                        <div class="announcements box mb-3">
-                                            <div class="title">
-                                                <div class="row">
-                                                    <div class="col-md-7">
-                                                        <div class="d-flex align-items-center"><img src='https://cdn.discordapp.com/avatars/882166477157986384/a_bd85d318261a83ce725580986dc9fc6d.gif?size=2048' alt='Profile picture' class='img-fluid'>
-                                                            <div class="user">
-                                                                <h3>Clynt</h3>
-                                                                <span>Admin</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-5 d-flex justify-content-end ">
-                                                        <span class="date">07/01/2022</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="box">
-                                                <p class="mb-0">20% OFF COUPON: VIRTY20</p>
+                                                <ul style="padding-left: 0; margin-bottom: 0;">
+                                                <?php foreach ($UserInvList as $row) : ?>
+                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><?php Util::display($row->code); ?></li>';>
+                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
+                                                    <?php endforeach; ?>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
@@ -400,7 +346,7 @@ $dcid = $user->getUserDCID($uid);
 
                                     <div class="carousel-item">
                                         <div class="title d-flex align-items-center">
-                                            <i onclick="switchCarousel(4)" class="fas fa-chevron-left"></i>
+                                            <i onclick="switchCarousel(0)" class="fas fa-chevron-left"></i>
                                             <h2>Changelogs</h2>
                                         </div>
                                         <div class="changelogs box mb-3">
@@ -409,7 +355,7 @@ $dcid = $user->getUserDCID($uid);
                                                     <div class="col-md-7">
                                                         <div class="d-flex align-items-center">
                                                             <div class="user">
-                                                                <h3 class="mb-0"><?php Util::display(SITE_NAME); ?> Panel</h3>
+                                                                <h3 class="mb-0">Virty Panel</h3>
                                                                 <span>• Beta v0.6<span>
                                                             </div>
                                                         </div>
@@ -437,7 +383,7 @@ $dcid = $user->getUserDCID($uid);
                                                     <div class="col-md-7">
                                                         <div class="d-flex align-items-center">
                                                             <div class="user">
-                                                                <h3 class="mb-0"><?php Util::display(SITE_NAME); ?> Selfbot</h3>
+                                                                <h3 class="mb-0">Virty Selfbot</h3>
                                                                 <span>• v3<span>
                                                             </div>
                                                         </div>
@@ -484,9 +430,7 @@ $dcid = $user->getUserDCID($uid);
                                             </div>
                                             <div class="box">
                                                 <ul style="padding-left: 0; margin-bottom: 0;">
-                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
-                                                        <span class=added>added</span> Initial release
-                                                    </li>
+                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><span class=added>added</span> Initial release</li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -499,7 +443,7 @@ $dcid = $user->getUserDCID($uid);
                                             <h2>Change Password</h2>
                                         </div>
                                         <div class="box mb-3">
-                                            <form method="POST" action="<?php Util::display($_SERVER['PHP_SELF']); ?>">
+                                            <form method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>">
                                                 <div class="form-input-icon mb-3">
                                                     <i class="fas fa-lock"></i>
                                                     <input class="auth-input" type="password" placeholder="Current password" name="currentPassword" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="current-password">
@@ -512,7 +456,7 @@ $dcid = $user->getUserDCID($uid);
                                                     <i class="fas fa-lock"></i>
                                                     <input class="auth-input" type="password" placeholder="Confirm password" name="confirmPassword" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="new-password">
                                                 </div>
-                                                <button class="button primary d-block mt-3 w-100" name="updatePassword" type="submit" value="submit">Change</button>
+                                                <button class="button primary d-block mt-3 w-100" name="activateSub" type="submit" value="submit">Change</button>
                                         </div>
                                         </form>
                                     </div>
@@ -547,7 +491,7 @@ $dcid = $user->getUserDCID($uid);
                                                                     <i class="fas fa-key"></i>
                                                                     <input class="auth-input" type="password" placeholder="Subscription Code" name="subCode" autocomplete="off" required minlength="8" pattern="^(?!^\s.*$)(?!^.*\s$)[ -~]+$" id="new-password">
                                                                 </div>
-                                                                <button class="button primary d-block mt-3 w-100" name="updatePassword" type="submit" value="submit">Submit</button>
+                                                                <button class="button primary d-block mt-3 w-100" name="activateSub" type="submit" value="submit">Submit</button>
                                                     </div>
                                                     </form>
                                                 </div>

@@ -188,10 +188,10 @@ class Users extends Database
     }
 
     // Select unused invite codes
-    protected function unusedInviteCodes()
+    protected function unusedInviteCodes($username)
     {
-        $this->prepare('SELECT * FROM `invites` WHERE `used` = ?');
-        $this->statement->execute([0]);
+        $this->prepare('SELECT * FROM `invites` WHERE `createdBy` = ?');
+        $this->statement->execute([$username]);
         return $this->statement->fetchAll();
     }
 

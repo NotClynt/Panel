@@ -6,7 +6,6 @@ require_once '../app/controllers/AdminController.php';
 $user = new UserController();
 $admin = new AdminController();
 
-include '../includes/db.php';
 
 Session::init();
 
@@ -23,85 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["resetHWID"])) {
         $rowUID = $_POST['resetHWID'];
         $admin->resetHWID($rowUID);
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Reset HWID from user with id $rowUID', NOW())";
-
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "HWID Reset",
-            "description" => "$username has reset the HWID for user with id $rowUID",
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
-
-        $result = $mysqli->query($sql);
     }
 
     if (isset($_POST["setBanned"])) {
         $rowUID = $_POST['setBanned'];
         $admin->setBanned($rowUID);
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Ban/unban user with id $rowUID', NOW())";
-
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "Ban/Unban",
-            "description" => "$username has banned/unbanned user with id $rowUID",
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
-
-        $result = $mysqli->query($sql);
     }
 
     if (isset($_POST["setAdmin"])) {
         $rowUID = $_POST['setAdmin'];
         $admin->setAdmin($rowUID);
-        $sql = "INSERT INTO `logs` (`log_user`, `log_action`, `log_time`) VALUES ('$username', 'Set admin / nonadmin user with id $rowUID', NOW())";
-
-        $webhook = ADMIN_WEBHOOK;
-        $embed = array(
-            "title" => "Admin/Non-Admin",
-            "description" => "$username has set user with id $rowUID as admin",
-            "color" => 0x00ff00
-        );
-        $data = array(
-            "embeds" => array($embed)
-        );
-        $options = array(
-            'http' => array(
-                'header'  => "Content-type: application/json\r\n",
-                'method'  => 'POST',
-                'content' => json_encode($data)
-            )
-        );
-        // send webhook
-        $context  = stream_context_create($options);
-        $result = file_get_contents($webhook, false, $context);
-
-        $result = $mysqli->query($sql);
     }
 
     header("location: users");

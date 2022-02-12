@@ -92,6 +92,11 @@ class AdminController extends Admin
         return $this->cheatMaint();
     }
 
+    // 
+    public function setCheatMotd($data)
+    {
+        return $this->cheatMotd($data);
+    }
 
     //
     public function setCheatVersion($data)

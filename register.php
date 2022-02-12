@@ -1,7 +1,7 @@
 <?php
 include 'app/require.php';
 
-include 'includes/db.php';
+
 
 $user = new UserController();
 
@@ -13,26 +13,6 @@ if (Session::isLogged()) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error = $user->registerUser($_POST);
-
-    $webhook = REGISER_WEBHOOK;
-    $embed = array(
-        "title" => "New User",
-        // post user
-        "description" => "**Username:** ".$_POST['username']."\n**User Agent:** ".$_SERVER['HTTP_USER_AGENT'],
-        "color" => 0x00ff00
-    );
-    $data = array(
-        "embeds" => array($embed)
-    );
-    $options = array(
-        'http' => array(
-            'header'  => "Content-type: application/json\r\n",
-            'method'  => 'POST',
-            'content' => json_encode($data)
-        )
-    );
-    $context  = stream_context_create($options);
-    $result = file_get_contents($webhook, false, $context);
 }
 
 ?>
