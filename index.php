@@ -598,52 +598,5 @@ $UserInvList = $user->getUnusedInvites($username);
         }
     }
 </script>
-<script>
-    $("#change-pass-form").submit(function(e) {
-        e.preventDefault();
-
-        if ($('#change-pass-button').hasClass('disabled'))
-            return;
-
-        $('#change-pass-button').addClass('disabled');
-        var data = new FormData($('#change-pass-form')[0]);
-        $.ajax({
-            url: 'php/change_pass.php',
-            contentType: "text/html; charset=UTF-8",
-            type: 'POST',
-            data: data,
-            cache: false,
-            async: true,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                switch (response) {
-                    case 'new_same_as_current':
-                        notify("The new password is the same as the current one.", 0);
-                        break;
-                    case 'wrong_current_password':
-                        notify("This is not your current password.", 0);
-                        break;
-                    case 'long_password':
-                        notify("Your password is too long.", 0);
-                        break;
-                    case 'changed':
-                        notify("Your password has been changed", 1);
-                        break;
-                }
-                // reset inputs
-                $('#current-password').val("");
-                $('#new-password').val("");
-            },
-            error: function() {
-                notify("Some unknown error has occurred, please try again later.", 0);
-            }
-        });
-        setTimeout(
-            function() {
-                $('#change-pass-button').removeClass('disabled').delay(800);
-            }, 700);
-    });
-</script>
 
 </html>
