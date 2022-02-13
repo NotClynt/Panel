@@ -20,18 +20,15 @@ Util::navbar();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["cheatStatus"])) {
         $admin->setCheatStatus();
-
     }
 
     if (isset($_POST["cheatMaint"])) {
         $admin->setCheatMaint();
-
     }
 
     if (isset($_POST["cheatVersion"])) {
         $ver = floatval($_POST['version']);
         $admin->setCheatVersion($ver);
-
     }
 
     if (isset($_POST['set_motd'])) {
