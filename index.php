@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if (isset($_POST['reset_discord'])) {
-
     $sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
     $result = mysqli_query($mysqli, $sql);
     Util::redirect('/');
