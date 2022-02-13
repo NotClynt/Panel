@@ -1,6 +1,6 @@
 
 
-# ZNIX PANEL EDIT
+# App Panel
 
 
 
