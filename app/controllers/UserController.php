@@ -148,7 +148,8 @@ class UserController extends Users
     }
 
     // reset HWID
-    public function resetHWID($uid) {
+    public function resetHWID($uid)
+    {
         $result = $this->resetUserHWID($uid);
         if ($result) {
             // return 'Successfully reset HWID.';
@@ -160,7 +161,8 @@ class UserController extends Users
     }
 
     // Reset Discord
-    public function resetDiscord($uid) {
+    public function resetDiscord($uid)
+    {
         $result = $this->resetDiscord($uid);
         if ($result) {
             return 'Successfully reset Discord.';
@@ -235,7 +237,8 @@ class UserController extends Users
         }
     }
 
-    public function getUnusedInvites($username) {
+    public function getUnusedInvites($username)
+    {
         return $this->unusedInviteCodes($username);
     }
 

@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["activateSub"])) {
         $error = $user->activateSub($_POST);
     }
-
 }
 $uid = Session::get("uid");
 $admin = Session::get("admin");
