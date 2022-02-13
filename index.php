@@ -3,6 +3,7 @@
 require_once 'app/require.php';
 require_once 'app/controllers/CheatController.php';
 
+include 'includes/db.php';
 
 $user = new UserController();
 $cheat = new CheatController();
@@ -18,19 +19,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $user->updateUserPass($_POST);
     }
 
-    if (isset($_POST["reset_hwid"])) {
-        $error = $user->resetHWID($_POST);
-    }
-
-    if (isset($_POST["resetDiscord"])) {
-        $error = $user->resetDiscord($_POST);
-    }
-
     if (isset($_POST["activateSub"])) {
         $error = $user->activateSub($_POST);
     }
-
 }
+
+if (isset($_POST['reset_discord'])) {
+
+    $sql = "UPDATE users SET dcid = '' WHERE uid = '$uid'";
+    $result = mysqli_query($mysqli, $sql);
+    Util::redirect('/');
+    mysqli_query($mysqli, $sql);
+}
+
+
+if (isset($_POST['reset_hwid'])) {
+    $time = time();
+    $sql = "SELECT * FROM users WHERE uid = '$uid'";
+    $result = mysqli_query($mysqli, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $last_reset = $row['last_reset'];
+    if ($time - $last_reset < 172800) {
+        echo '<div class="alert alert-danger" role="alert">
+        <strong>Error!</strong>';
+        $time = 172800 - ($time - $last_reset);
+        $days = floor($time / 86400);
+        $hours = floor(($time % 86400) / 3600);
+        $minutes = floor(($time % 3600) / 60);
+        $seconds = floor($time % 60);
+        echo 'You can only reset your hwid once every 48 hours.
+        You have ' . $days . ' days, ' . $hours . ' hours, ' . $minutes . ' minutes, and ' . $seconds . ' seconds left.';
+        echo '</div>';
+    } else {
+        $sql = "UPDATE users SET hwid = NULL WHERE uid = '$uid'";
+        $result = mysqli_query($mysqli, $sql);
+        Util::redirect('/');
+        mysqli_query($mysqli, $sql);
+        echo '<div class="alert alert-success" role="alert">
+        <strong>Success!</strong> Your HWID has been reset.
+        </div>';
+    }
+}
+
 $uid = Session::get("uid");
 $admin = Session::get("admin");
 $username = Session::get("username");
@@ -260,21 +290,21 @@ $UserInvList = $user->getUnusedInvites($username);
                                                 </div>
                                             <?php endif; ?>
                                             <?php if (Session::isReseller() == true) : ?>
-                                            <div class="col-lg-6">
-                                                <div class="cape box">
-                                                    <div class="row">
-                                                        <div class="col-6 d-flex align-items-center">
-                                                            <div>
-                                                                <h2 class="mb-2" style="position: relative; left:.25rem;">Reseller</h2>
-                                                                <a href="reseller/" class="button primary outline rounded-circle low-padding low-weight medium-size" style="font-size: .6rem; padding: 0.45rem 2.0rem">Go</a>
+                                                <div class="col-lg-6">
+                                                    <div class="cape box">
+                                                        <div class="row">
+                                                            <div class="col-6 d-flex align-items-center">
+                                                                <div>
+                                                                    <h2 class="mb-2" style="position: relative; left:.25rem;">Reseller</h2>
+                                                                    <a href="reseller/" class="button primary outline rounded-circle low-padding low-weight medium-size" style="font-size: .6rem; padding: 0.45rem 2.0rem">Go</a>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-6 d-flex justify-content-end">
-                                                            <img src="https://cdn.discordapp.com/attachments/919533264119677018/927264353504362496/PicsArt_01-02-07.16.51.png" alt="" class="img-fluid" width="65.5rem">
+                                                            <div class="col-6 d-flex justify-content-end">
+                                                                <img src="https://cdn.discordapp.com/attachments/919533264119677018/927264353504362496/PicsArt_01-02-07.16.51.png" alt="" class="img-fluid" width="65.5rem">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             <?php endif; ?>
                                             <div class="col-lg-6">
                                                 <div class="cape box">
@@ -333,10 +363,10 @@ $UserInvList = $user->getUnusedInvites($username);
                                             </div>
                                             <div class="box">
                                                 <ul style="padding-left: 0; margin-bottom: 0;">
-                                                <?php foreach ($UserInvList as $row) : ?>
-                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><?php Util::display($row->code); ?></li>
-                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
-                                                    <?php endforeach; ?>
+                                                    <?php foreach ($UserInvList as $row) : ?>
+                                                        <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><?php Util::display($row->code); ?></li>
+                                                        <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
+                                                        <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>

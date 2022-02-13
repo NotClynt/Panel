@@ -17,6 +17,19 @@ Util::adminCheck();
 Util::head('Admin Panel');
 Util::navbar();
 
+
+function randomCode($int) {
+
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$randomString = 'Virty-';
+	
+	for ($i = 0; $i < $int; $i++) {
+		$randomString .= $characters[rand(0, strlen($characters) - 1)];
+	}
+	
+	return $randomString;
+}
+
 // if post request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["genInv"])) {
@@ -25,15 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     header("location: invites");
 
+
     if (isset($_POST["invWave"])) {
 
         $admin->getInvWaveGen($username);
 
     }
 
-
     header("location: invites");
+
 }
+
 ?>
 
 <div class="container mt-2">
