@@ -79,7 +79,8 @@ class Util
         }
     }
 
-    public static function resellerCheck() {
+    public static function resellerCheck()
+    {
         if (!Session::isReseller()) {
             Util::redirect('/index.php');
         }
