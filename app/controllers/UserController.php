@@ -149,11 +149,13 @@ class UserController extends Users
 
     // reset HWID
     public function resetHWID($uid) {
-        $result = $this->resetHWID($uid);
+        $result = $this->resetUserHWID($uid);
         if ($result) {
-            return 'Successfully reset HWID.';
+            // return 'Successfully reset HWID.';
+            return true;
         } else {
-            return 'Your last HWID reset is not older than 48 hours.';
+            // return 'Your last HWID reset is not older than 48 hours.';
+            return false;
         }
     }
 

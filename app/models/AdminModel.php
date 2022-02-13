@@ -47,17 +47,18 @@ class Admin extends Database
     }
 
     // Invite wave - create invite codes and send them to users
-    protected function invCodeWave($code)
+    protected function invCodeWave()
     {
-        $this->prepare('SELECT * FROM `users`');
-        $this->statement->execute();
-        $userList = array();
-        while ($row = $this->statement->fetch()) {
-            $userList[] = $row['username'];
-        }
-        foreach ($userList as $user) {
-            $this->prepare('INSERT INTO `invites` (`code`, `createdBy`, `createdAt`) VALUES (?, ?, ?)');
-            $this->statement->execute([$code, $user, date('Y-m-d H:i:s')]);
+        if (Session::isAdmin()) {
+            $this->prepare('SELECT * FROM `users`');
+            $this->statement->execute();
+
+            $result = $this->statement->fetchAll();
+
+            foreach ($result as $user) {
+                $code = bin2hex(random_bytes(16));
+                $this->invCodeGen($code, $user->username);
+            }
         }
     }
 

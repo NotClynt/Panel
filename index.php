@@ -4,8 +4,6 @@ require_once 'app/require.php';
 require_once 'app/controllers/CheatController.php';
 
 
-
-
 $user = new UserController();
 $cheat = new CheatController();
 
@@ -20,28 +18,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $user->updateUserPass($_POST);
     }
 
-
-    if (isset($_POST["activateSub"])) {
-        $error = $user->activateSub($_POST);
-    }
-
-    if (isset($_POST["resetHWID"])) {
+    if (isset($_POST["reset_hwid"])) {
         $error = $user->resetHWID($_POST);
     }
 
     if (isset($_POST["resetDiscord"])) {
         $error = $user->resetDiscord($_POST);
     }
+
+    if (isset($_POST["activateSub"])) {
+        $error = $user->activateSub($_POST);
+    }
+
 }
 $uid = Session::get("uid");
 $admin = Session::get("admin");
 $username = Session::get("username");
+$sub = $user->getSubStatus();
 
 Util::banCheck();
 
 $hwid = $user->getUserHWID($uid);
 $dcid = $user->getUserDCID($uid);
-$invList = $user->getUnusedInvites($username);
+$UserInvList = $user->getUnusedInvites($username);
 
 ?>
 <!DOCTYPE html>
@@ -335,7 +334,7 @@ $invList = $user->getUnusedInvites($username);
                                             <div class="box">
                                                 <ul style="padding-left: 0; margin-bottom: 0;">
                                                 <?php foreach ($UserInvList as $row) : ?>
-                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><?php Util::display($row->code); ?></li>';>
+                                                    <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem"><?php Util::display($row->code); ?></li>
                                                     <li style="list-style-type: none; margin-left: 0; margin-top: .4rem; margin-bottom:.4rem">
                                                     <?php endforeach; ?>
                                                 </ul>
