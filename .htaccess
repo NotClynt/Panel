@@ -1,3 +1,30 @@
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^\.]+)$ $1.php [NC,L]
+<IfModule mod_rewrite.c>
+
+    RewriteEngine on
+    RewriteBase /
+
+# Auth
+RewriteRule ^login?$ login.php [L]
+RewriteRule ^register?$ register.php [L]
+RewriteRule ^forgot?$ forgot.php [L]
+RewriteRule ^logout?$ logout.php [L]
+
+# Panel
+RewriteRule ^panel?$ index.php [L]
+RewriteRule ^banned?$ banned.php [L]
+RewriteRule ^download?$ download.php [L]
+
+# Reseller
+RewriteRule ^reseller/codes?$ codes.php [L]
+RewriteRule ^reseller/?$ index.php [L]
+
+# Admin
+RewriteRule ^admin/?$ admin/index.php [L]
+RewriteRule ^admin/cheat?$ admin/cheat.php [L]
+RewriteRule ^admin/invites?$ admin/invites.php [L]
+RewriteRule ^admin/logs?$ admin/logs.php [L]
+RewriteRule ^admin/sub?$ admin/sub.php [L]
+RewriteRule ^admin/users?$ admin/users.php [L]
+
+
+</IfModule>
