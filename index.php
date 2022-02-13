@@ -53,6 +53,8 @@ if (isset($_POST['reset_hwid'])) {
     } else {
         $sql = "UPDATE users SET hwid = NULL WHERE uid = '$uid'";
         $result = mysqli_query($mysqli, $sql);
+        $sql2 = "UPDATE users SET last_reset = '$time' WHERE uid = '$uid'";
+        $result = mysqli_query($mysqli, $sql);
         Util::redirect('/');
         mysqli_query($mysqli, $sql);
         echo '<div class="alert alert-success" role="alert">
