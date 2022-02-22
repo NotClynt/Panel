@@ -44,6 +44,8 @@ How to setup the panel?
 
       --> Join Discord [Server](https://discord.gg/rcTeJW44nG) for base setup!
 
+      --> Join [Here](https://discord.gg/rmQX9MNWJR) for Support.
+
 
 
 Video for Webhook setup [Click here](https://www.youtube.com/watch?v=rg5fU-xgIXU)
@@ -51,8 +53,6 @@ Video for Webhook setup [Click here](https://www.youtube.com/watch?v=rg5fU-xgIXU
 Video for Discord OAuth2 setup [Click here](https://youtu.be/zHnGx7bJ0oE)
 
 
-
-Download database base [HERE](https://anonfiles.com/L9b7R5B8x2/db_1_sql)
 
 Default login data.
 Username: admin
