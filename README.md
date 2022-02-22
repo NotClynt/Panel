@@ -44,7 +44,7 @@ How to setup the panel?
 
       --> Join Discord [Server](https://discord.gg/rcTeJW44nG) for base setup!
 
-      --> Join [Here](https://discord.gg/rmQX9MNWJR) for Support.
+   --> Join [Here](https://discord.gg/rmQX9MNWJR) for Support.
 
 
 
