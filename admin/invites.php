@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <form method="POST" action="<?php Util::display($_SERVER['PHP_SELF']); ?>">
 
-                    <button name="genInv" type="submit" class="btn btn-outline-primary btn-sm">
+                    <button name="invWave" type="submit" class="btn btn-outline-primary btn-sm">
                         Wave
                     </button>
 
