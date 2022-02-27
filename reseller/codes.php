@@ -15,7 +15,7 @@ $username = Session::get("username");
 Util::resellerCheck();
 Util::head('Reseller Panel');
 
-$invList = $reseller->getResellerSubCodeArray($username);
+$subList = $reseller->getResellerSubCodeArray($username);
 $balance = $reseller->getBalance($username);
 
 if (isset($_POST["genCode"])) {
