@@ -12,6 +12,7 @@ Session::init();
 
 $username = Session::get("username");
 
+Util::resellerCheck();
 Util::head('Reseller Panel');
 
 $invList = $reseller->getResellerSubCodeArray($username);
