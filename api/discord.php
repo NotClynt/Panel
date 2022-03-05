@@ -65,28 +65,19 @@ if (session('access_token')) {
     curl_close($ch);
 
     if ($_SESSION["login"]) {
-        $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
-        $stmt->bind_param("is", $user->id, $username);
-        $stmt->execute();
-        $stmt->close();
+      $sql = "UPDATE `users` SET `dcid` = '".$user->id."' WHERE `username` = '".$username."'";
+      $query = $db->query($sql);
+    
+      $role = "919533220641513483";
 
-        $role = "919533220641513483";
     } elseif ($_SESSION["admin"]) {
-        $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
-        $stmt->bind_param("is", $user->id, $username);
-        $stmt->execute();
-        $stmt->close();
+      $sql = "UPDATE `users` SET `dcid` = '".$user->id."' WHERE `username` = '".$username."'";
+      $query = $db->query($sql);
 
         $role = "919533212030623774";
     }
-    // else if ($_SESSION["reseller"]) {
-    //     $stmt = $mysqli->prepare("UPDATE users SET dcid = ? WHERE username = ?");
-    //     $stmt->bind_param("is", $user->id, $username);
-    //     $stmt->execute();
-    //     $stmt->close();
-
-    //     $role = "919533220570210354";
-    // }
+    
+     }
 
 
 

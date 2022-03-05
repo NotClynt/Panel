@@ -19,6 +19,8 @@ define('SITE_DESC', 'Virty ');
  */
 define('SUB_DIR', '/panel');
 
+define('API_KEY', 'some random string');
+
 // Loader link // From Root folder
 define('LOADER_URL', SITE_ROOT.'/x.exe');
 
