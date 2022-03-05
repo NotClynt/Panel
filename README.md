@@ -34,7 +34,7 @@ Hire me [here](https://clynt.sellix.io/product/61f7f67baa3c3)
 
 #### Preview
 
-<img title="" src="https://clynt.de/preview.png" alt="" data-align="center">
+<img title="" src="https://raw.githubusercontent.com/clynt707/Panel/main/README_ASSETS/preview.png" alt="" data-align="center">
 
 ---
 
@@ -62,7 +62,7 @@ Password: admin
 
 ### Free Hosting
 
-<img title="" src="https://clynt.de/puhad.png" alt="" data-align="center">
+<img title="" src="https://raw.githubusercontent.com/clynt707/Panel/main/README_ASSETS/puhad.png" alt="" data-align="center">
 
 You need a free Webspace?
 
