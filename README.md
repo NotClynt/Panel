@@ -94,7 +94,7 @@ Then it's time to switch to [PuhHosting](https;//www.puh.hosting). Get a low-cos
 
 * Website : https://clynt.me/
 
-* Discord : https://discord.gg/rmQX9MNWJR
+* Discord : https://discord.gg/nRBkz2NWSU
 
 * Sellix  : https://sellix.io/Clynt
 
