@@ -3,8 +3,6 @@
 require_once 'app/require.php';
 require_once 'app/controllers/CheatController.php';
 
-include 'includes/db.php';
-
 $user = new UserController();
 $cheat = new CheatController();
 
