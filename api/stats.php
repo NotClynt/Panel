@@ -1,6 +1,6 @@
 <?php
 
-include "../includes/db.php";
+require_once '../app/require.php';
 
 
 $users = $mysqli->query("SELECT COUNT(*) FROM users");
