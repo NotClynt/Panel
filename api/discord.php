@@ -1,7 +1,7 @@
 <?php
 
 
-include "../includes/db.php";
+//include "../includes/db.php";
 
 require_once '../app/require.php';
 
