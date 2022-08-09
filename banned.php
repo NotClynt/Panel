@@ -3,7 +3,6 @@
 require_once 'app/require.php';
 
 
-include 'includes/db.php';
 
 $user = new UserController();
 
